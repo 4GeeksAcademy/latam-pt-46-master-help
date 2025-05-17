@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/img/master-help-logo-hz.webp";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -40,8 +41,12 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="d-flex ms-lg-3">
-            <button className="btn btn-outline-light me-2">Iniciar Sesión</button> 
-            <button className="btn btn-primary">Regístrate</button>
+           <Link to="/login" className="btn btn-outline-light me-2">
+              Iniciar Sesión
+            </Link>
+            <Link to="/signin" className="btn btn-primary">
+              Registrate
+            </Link>
           </div>
         </div>
       </div>
