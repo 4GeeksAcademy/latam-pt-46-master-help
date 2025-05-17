@@ -82,7 +82,7 @@ export const LoginForm = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100 btn-lg">
+          <button type="submit" className="btn btn-outline-light w-100 btn-lg">
             {isLogin ? "Ingresar" : "Crear Cuenta"}
           </button>
           {message && (
