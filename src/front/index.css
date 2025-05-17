@@ -1,0 +1,24 @@
+/* index.css */
+.hero-section {
+  padding: 7rem 0;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+.highlight {
+  color: #00bfff;
+}
+.section-dark {
+  background-color: #181818;
+  padding: 4rem 0;
+  color: #e0e0e0;
+}
+.icon {
+  font-size: 3rem;
+  color: #00bfff;
+  margin-bottom: 1rem;
+}
+.final-cta-section {
+  background-color: #00bfff;
+  color: #121212;
+  padding: 5rem 0;
+}
