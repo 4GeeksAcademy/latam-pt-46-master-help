@@ -1,24 +1,176 @@
-/* index.css */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap");
+
+/* --- ESTILOS GENERALES --- */
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+  color: #ffffff;
+  font-weight: 900  !important;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3rem;
+}
+h2 {
+  font-size: 3rem;
+  margin-bottom: 2.5rem;
+}
+h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+p.lead {
+  color: #b0b0b0;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+a {
+  color: #00bfff;
+  text-decoration: none;
+}
+a:hover {
+  color: #009acd;
+}
+
+/* --- HERO --- */
 .hero-section {
   padding: 7rem 0;
   background-color: #1a1a1a;
   color: #fff;
+  position: relative;
 }
-.highlight {
-  color: #00bfff;
+.hero-section h1 {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 18, 18, 0.7);
+  z-index: 0;
+}
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* --- SECCIONES --- */
+
+.section-padding {
+  padding: 5rem 0;
 }
 .section-dark {
   background-color: #181818;
   padding: 4rem 0;
   color: #e0e0e0;
 }
+.highlight {
+  color: #00bfff;
+}
+
+
+
+
+/* --- ICONOS --- */
 .icon {
   font-size: 3rem;
   color: #00bfff;
   margin-bottom: 1rem;
 }
+
+/* --- CARDS --- */
+.card {
+  background-color: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 191, 255, 0.1);
+}
+.card .card-title {
+  color: #00bfff;
+}
+.card .card-body i {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  color: #00bfff;
+}
+
+/* --- TESTIMONIOS --- */
+.avatar {
+  width: 90px;
+  height: 90px;
+  border: 3px solid #00bfff;
+}
+.testimonials-section .card {
+  background-color: #252525;
+}
+
+/* --- CTA FINAL --- */
 .final-cta-section {
   background-color: #00bfff;
   color: #121212;
   padding: 5rem 0;
+}
+.final-cta-section h2 {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+.final-cta-section .btn-light {
+  background-color: #ffffff;
+  color: #00bfff;
+  font-weight: bold;
+}
+.final-cta-section .btn-light:hover {
+  background-color: #f0f0f0;
+}
+
+/* --- BOTONES --- */
+.btn {
+  font-weight: 600;
+}
+.btn-primary {
+  background-color: #00bfff !important;
+  border-color: #00bfff !important;
+  color: #121212 !important;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #009acd !important;
+  border-color: #009acd !important;
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.3) !important;
+}
+.btn-outline-light {
+  border-color: #00bfff !important;
+  color: #00bfff !important;
+}
+.btn-outline-light:hover {
+  background-color: #00bfff !important;
+  color: #121212 !important;
 }

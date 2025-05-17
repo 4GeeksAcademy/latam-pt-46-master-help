@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import "../styles/home.css";
+
 
 
 const PORT = import.meta.env.VITE_PORT;
@@ -56,7 +58,7 @@ export const LoginForm = () => {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="card shadow p-4" style={{ width: "100%", maxWidth: "400px", borderRadius: "1rem" }}>
-        <h3 className="text-center mb-4 text-primary">{isLogin ? "Iniciar Sesión" : "Registrarse"}</h3>
+        <h3 className="text-center mb-4 highlight">{isLogin ? "Iniciar Sesión" : "Registrarse"}</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
             <label className="form-label">Correo Electrónico</label>
