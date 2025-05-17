@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg fixed-top custom-navbar">
       <div className="container">
-        <a className="navbar-brand" href="#hero">
+        <a className="navbar-brand" href="/#hero">
           <img src={logo} alt="Master Help Logo" height="100" />
         </a>
         <button
@@ -20,22 +20,22 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" href="#solution-benefits">
+              <a className="nav-link" href="/#solution-benefits">
                 Beneficios
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#how-it-works">
+              <a className="nav-link" href="/#how-it-works">
                 Cómo Funciona
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#use-cases">
+              <a className="nav-link" href="/#use-cases">
                 Casos de Uso
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#testimonials">
+              <a className="nav-link" href="/#testimonials">
                 Testimonios
               </a>
             </li>
