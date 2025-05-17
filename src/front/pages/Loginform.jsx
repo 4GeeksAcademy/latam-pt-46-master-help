@@ -2,25 +2,29 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 
-const login = async (email, password, isLogin) => {
-  const path = isLogin ? "login" : "signin" 
-    const response = await fetch(`https://solid-telegram-5jr4q95vxq7377vx-3001.app.github.dev/api/user/${path}`, {
-  method : 'POST',
-  body: JSON.stringify({email, password}),
-  headers: {
-    'Content-Type':'application/json'
-  }
+const PORT = import.meta.env.VITE_PORT;
+const DOMAIN = import.meta.env.VITE_CODESPACE_NAME
 
-    });
-    const data = await response.json();
-    console.log("ESTA ES LA Respuesta:", data); // Aquí ves si hay token
-    if (response.ok) {
-      const data = await response.json();
-      console.log("este es:", data)
-      return data;
-    } else{
-      return false;
-      } 
+const URL = `${DOMAIN}-${PORT}`
+
+
+const login = async (email, password, isLogin) => {
+  const path = isLogin ? "login" : "signin"
+  const response = await fetch(`https://${URL}.app.github.dev/${path}`, {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+
+  });
+  const data = await response.json();
+  console.log("Respuesta:", data);
+  if (response.ok) {
+    return data;
+  } else {
+    return false;
+  }
 
 }
 
@@ -34,16 +38,16 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
 
     const response = await login(email, password, isLogin);
-    if (response==false) {
+    if (response == false) {
       setMessage("Credenciales Incorrectas")
-    }else if(isLogin){
+    } else if (isLogin) {
       localStorage.setItem("token", response.token);
       setMessage("Inicio de sesión exitoso.");
       navigate("/dashboard");//reemplazar dashboard por la pagina que vaya luego del login
-    } else{
+    } else {
       navigate("/login")
     }
 
