@@ -3,16 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/home.css";
 
 
-
-const PORT = import.meta.env.VITE_PORT;
-const DOMAIN = import.meta.env.VITE_CODESPACE_NAME
-
-const URL = `${DOMAIN}-${PORT}`
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 
 const login = async (email, password, isLogin) => {
   const path = isLogin ? "login" : "signin"
-  const response = await fetch(`https://${URL}.app.github.dev/${path}`, {
+  const response = await fetch(`${BACKEND_URL}${path}`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: {
