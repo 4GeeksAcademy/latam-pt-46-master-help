@@ -1,55 +1,71 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const ProcessDetail = () => {
   const { id } = useParams();
   const [process, setProcess] = useState(null);
   const [steps, setSteps] = useState([]);
+  const [error, setError] = useState("");
 
   const fetchProcessDetail = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`/api/process/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
-    setProcess(data.process);
-    setSteps(data.steps);
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/process/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Error al obtener el proceso:", text);
+        setError("No se pudo cargar el proceso.");
+        return;
+      }
+
+      const data = await res.json();
+      setProcess(data.process);
+      setSteps(data.steps);
+    } catch (err) {
+      console.error("Error de red:", err);
+      setError("Ocurrió un error inesperado al cargar los datos.");
+    }
   };
 
   useEffect(() => {
     fetchProcessDetail();
-  }, []);
+  }, [id]);
+
+  if (error) return <div className="alert alert-danger mt-5">{error}</div>;
+  if (!process) return <div className="text-center mt-5">Cargando proceso...</div>;
 
   return (
-    <div className="container">
-      <h2>Proceso: {process?.name}</h2>
-      <h4>Categoría: {process?.category}</h4>
+    <div className="container mt-5">
+      <h2>Proceso: {process.name}</h2>
+      <h5 className="text-muted mb-4">Categoría: {process.category}</h5>
 
       <div>
         {steps.map((step, idx) => (
-          <div key={idx} style={{ marginBottom: "20px" }}>
-            <h5>
-              Paso {idx + 1}: {step.label}
-            </h5>
+          <div key={idx} className="mb-4 p-3 border rounded bg-light">
+            <h5>Paso {idx + 1}: {step.label}</h5>
 
             {step.type === "TEXT" && <p>{step.content}</p>}
 
             {step.type === "VIDEO_URL" && (
-              <iframe
-                src={step.content}
-                width="560"
-                height="315"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={`video-${idx}`}
-              ></iframe>
+              <div className="ratio ratio-16x9">
+                <iframe
+                  src={step.content}
+                  title={`video-${idx}`}
+                  allowFullScreen
+                ></iframe>
+              </div>
             )}
 
             {step.type === "IMAGE" && (
-              <img src={step.content} alt="Paso imagen" width="300" />
+              <img src={step.content} alt="Paso imagen" className="img-fluid" />
             )}
 
             {step.type === "PDF" && (
@@ -59,7 +75,7 @@ const ProcessDetail = () => {
             )}
 
             {step.type === "VIDEO" && (
-              <video width="320" controls>
+              <video className="w-100" controls>
                 <source src={step.content} type="video/mp4" />
                 Tu navegador no soporta video HTML5.
               </video>
