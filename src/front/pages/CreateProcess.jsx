@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -7,6 +8,7 @@ const CreateProcess = () => {
   const [category, setCategory] = useState("");
   const [steps, setSteps] = useState([]);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleAddStep = () => {
     setSteps([
@@ -25,7 +27,6 @@ const CreateProcess = () => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
-    // Validación previa
     if (!name.trim()) {
       alert("El nombre del proceso es obligatorio.");
       return;
@@ -53,7 +54,6 @@ const CreateProcess = () => {
       const data = await res.json();
       const processId = data.id;
 
-      // Subir pasos
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
         const formData = new FormData();
@@ -94,8 +94,18 @@ const CreateProcess = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Crear Nuevo Proceso</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Crear Nuevo Proceso</h2>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => navigate("/dashboard")}
+        >
+          ← Volver al Dashboard
+        </button>
+      </div>
+
       {message && <div className="alert alert-success">{message}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Nombre del proceso</label>

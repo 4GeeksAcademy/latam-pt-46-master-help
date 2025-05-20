@@ -64,20 +64,36 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Mis Procesos</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="m-0">Mis Procesos</h2>
+        <button className="btn btn-success" onClick={() => navigate("/crear-proceso")}>
+          + Crear Proceso
+        </button>
+      </div>
+
       {processes.length === 0 ? (
-        <p>No hay procesos creados.</p>
+        <p>No hay procesos creados aún.</p>
       ) : (
         <ul className="list-group">
           {processes.map((p) => (
             <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
               <div>
-                <strong>{p.name}</strong> <br />
+                <strong>{p.name}</strong><br />
                 <small className="text-muted">{p.category}</small>
               </div>
               <div>
-                <button className="btn btn-outline-primary btn-sm me-2" onClick={() => navigate(`/process/${p.id}`)}>Ver</button>
-                <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(p.id)}>Eliminar</button>
+                <button
+                  className="btn btn-outline-primary btn-sm me-2"
+                  onClick={() => navigate(`/process/${p.id}`)}
+                >
+                  Ver
+                </button>
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => handleDelete(p.id)}
+                >
+                  Eliminar
+                </button>
               </div>
             </li>
           ))}

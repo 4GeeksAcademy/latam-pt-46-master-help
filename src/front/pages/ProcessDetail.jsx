@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ProcessDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [process, setProcess] = useState(null);
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState("");
@@ -44,7 +45,13 @@ const ProcessDetail = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Proceso: {process.name}</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Proceso: {process.name}</h2>
+        <button className="btn btn-outline-secondary" onClick={() => navigate("/dashboard")}>
+          ← Volver al Dashboard
+        </button>
+      </div>
+
       <h5 className="text-muted mb-4">Categoría: {process.category}</h5>
 
       <div>
