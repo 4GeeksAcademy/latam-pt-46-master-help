@@ -11,7 +11,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Allow CORS requests to this API
 api = Blueprint('api', __name__)
-CORS(api)
+CORS(api, origins=[
+     "https://ominous-potato-r5rqv57r4rp3x9p6-3000.app.github.dev",
+     "https://ominous-potato-r5rqv57r4rp3x9p6-3001.app.github.dev"])
 
 
 @api.route('/user/signin', methods=['POST'])
@@ -29,7 +31,10 @@ def handle_register_new_user():
     if len(request_body["password"]) < 6:
         return jsonify({"message": "Password must be at least 6 characters"}), 400
 
+    print(
+        f'Creating user with email: {request_body["email"]} and password: {request_body["password"]}')
     hashed_password = generate_password_hash(request_body["password"])
+    print(f'Hashed password: {hashed_password}')
     user = User(
         email=request_body["email"],
         password=hashed_password,

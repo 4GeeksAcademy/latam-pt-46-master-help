@@ -1,29 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/home.css";
-
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
+const BACKEND_URL = localStorage.getItem("BACKEND_URL");
 
 const login = async (email, password, isLogin) => {
-  const path = isLogin ? "login" : "signin"
+  const path = isLogin ? "user/login" : "user/signin";
   const response = await fetch(`${BACKEND_URL}${path}`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: {
       'Content-Type': 'application/json'
     }
-
   });
   const data = await response.json();
-  console.log("Respuesta:", data);
   if (response.ok) {
     return data;
   } else {
     return false;
   }
-
 }
 
 export const LoginForm = () => {
