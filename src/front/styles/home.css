@@ -210,3 +210,8 @@ a:hover {
   z-index: 2;
   position: relative;
 }
+
+.dashboard-container {
+  margin-top: 100px; 
+  padding: 20px;
+}
