@@ -7,6 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Allow CORS requests to this API
 api = Blueprint('api', __name__)
@@ -28,10 +29,12 @@ def handle_register_new_user():
     if len(request_body["password"]) < 6:
         return jsonify({"message": "Password must be at least 6 characters"}), 400
 
-    user = User(email=request_body["email"],
-                password=request_body["password"],
-                is_active=True
-                )
+    hashed_password = generate_password_hash(request_body["password"])
+    user = User(
+        email=request_body["email"],
+        password=hashed_password,
+        is_active=True
+    )
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialize()), 201
@@ -40,16 +43,8 @@ def handle_register_new_user():
 @api.route('/user/login', methods=['POST'])
 def handle_login_user():
     request_body = request.get_json()
-    if not request_body:
-        return jsonify({"message": "No request body"}), 400
-    if not request_body.get("email"):
-        return jsonify({"message": "No email"}), 400
-    if not request_body.get("password"):
-        return jsonify({"message": "No password"}), 400
-
-    user = User.query.filter_by(
-        email=request_body["email"], password=request_body["password"]).first()
-    if not user:
+    user = User.query.filter_by(email=request_body["email"]).first()
+    if not user or not check_password_hash(user.password, request_body["password"]):
         return jsonify({"message": "Invalid Credentials"}), 404
     if not user.is_active:
         return jsonify({"message": "User is not active"}), 403
