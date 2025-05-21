@@ -44,6 +44,9 @@ const Navbar = () => {
            <Link to="/login" className="btn btn-outline-light me-2">
               Iniciar Sesión
             </Link>
+            <Link to="/dashboard" className="btn btn-outline-light me-2">
+              Mis procesos
+            </Link>
             <Link to="/signin" className="btn btn-primary">
               Registrate
             </Link>
