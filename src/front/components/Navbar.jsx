@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg fixed-top custom-navbar">
+    <nav className="navbar navbar-expand-lg fixed-top custom-navbar custom-toggler">
       <div className="container">
         <a className="navbar-brand" href="/#hero">
           <img src={logo} alt="Master Help Logo" height="100" />
