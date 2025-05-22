@@ -1,6 +1,8 @@
 import React from "react";
 import logo from "../assets/img/master-help-logo-hz.webp";
 import { Link } from "react-router-dom";
+import { NavHashLink } from 'react-router-hash-link';
+
 
 const Navbar = () => {
   return (
@@ -19,29 +21,39 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
+
+            <NavHashLink
+              to="/#solution-benefits" className="nav-item nav-link">
               <a className="nav-link" href="/#solution-benefits">
                 Beneficios
-              </a>
-            </li>
-            <li className="nav-item">
+                </a>
+            </NavHashLink>
+
+                        <NavHashLink
+              to="/#how-it-works" className="nav-item nav-link">
               <a className="nav-link" href="/#how-it-works">
                 Cómo Funciona
-              </a>
-            </li>
-            <li className="nav-item">
+                </a>
+            </NavHashLink>
+
+                                  <NavHashLink
+              to="/#use-cases" className="nav-item nav-link">
               <a className="nav-link" href="/#use-cases">
-                Casos de Uso
-              </a>
-            </li>
-            <li className="nav-item">
+                Casos de uso
+                </a>
+            </NavHashLink>
+
+                                           <NavHashLink
+              to="/#testimonials" className="nav-item nav-link">
               <a className="nav-link" href="/#testimonials">
                 Testimonios
-              </a>
-            </li>
+                </a>
+            </NavHashLink>
+
+
           </ul>
           <div className="d-flex ms-lg-3">
-           <Link to="/login" className="btn btn-outline-light me-2">
+            <Link to="/login" className="btn btn-outline-light me-2">
               Iniciar Sesión
             </Link>
             <Link to="/dashboard" className="btn btn-outline-light me-2">
