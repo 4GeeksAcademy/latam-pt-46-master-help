@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Boolean, ForeignKey, ForeignKey, Text, Enum, Integer, DateTime
+from sqlalchemy.orm import relationship, Mapped, mapped_column, relationship
+from datetime import datetime
+import enum
 
 db = SQLAlchemy()
 
@@ -14,6 +16,8 @@ class StepType(enum.Enum):
     VIDEO_URL = "VIDEO_URL"
 
 # Modelo de Usuario
+
+
 class User(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -22,6 +26,9 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
+    categories: Mapped[list["Category"]] = relationship(
+        "Category", back_populates="user", cascade="all, delete-orphan")
+    processes = relationship("Process", back_populates="user")
 
     def serialize(self):
         return {
@@ -31,15 +38,19 @@ class User(db.Model):
         }
 
 # Modelo de Proceso
+
+
 class Process(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     category: Mapped[str] = mapped_column(String(120), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     user = relationship("User", back_populates="processes")
-    steps = relationship("Step", back_populates="process", cascade="all, delete")
+    steps = relationship("Step", back_populates="process",
+                         cascade="all, delete")
 
     def serialize(self):
         return {
@@ -51,6 +62,8 @@ class Process(db.Model):
         }
 
 # Modelo de Paso del Proceso
+
+
 class Step(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     process_id: Mapped[int] = mapped_column(ForeignKey("process.id"))
@@ -69,7 +82,6 @@ class Step(db.Model):
             "content": self.content,
             "order": self.order
         }
-
 
 
 class Category(db.Model):
