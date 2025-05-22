@@ -13,7 +13,7 @@ const EditarProceso = () => {
 
   const fetchProcess = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`${BACKEND_URL}/api/process/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/process/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +28,7 @@ const EditarProceso = () => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`${BACKEND_URL}/api/process/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/process/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
