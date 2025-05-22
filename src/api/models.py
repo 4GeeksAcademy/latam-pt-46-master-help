@@ -84,6 +84,7 @@ class Step(db.Model):
             "order": self.order
         }
 
+# Modelo de Categoría
 
 class Category(db.Model):
     __tablename__ = "categories"
