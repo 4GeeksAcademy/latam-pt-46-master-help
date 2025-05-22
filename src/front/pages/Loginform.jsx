@@ -5,7 +5,7 @@ const BACKEND_URL = localStorage.getItem("BACKEND_URL");
 
 const login = async (email, password, isLogin) => {
   const path = isLogin ? "user/login" : "user/signin";
-  const response = await fetch(`${BACKEND_URL}${path}`, {
+const response = await fetch(`${BACKEND_URL}/${path}`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: {
@@ -29,21 +29,20 @@ export const LoginForm = () => {
   const isLogin = location.pathname == "/login";
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
+  const response = await login(email, password, isLogin);
+  if (response == false) {
+    setMessage("Credenciales Incorrectas");
+  } else if (isLogin) {
+    localStorage.setItem("token", response.access_token); // ✅ CORREGIDO
+    setMessage("Inicio de sesión exitoso.");
+    navigate("/dashboard");
+  } else {
+    navigate("/login");
+  }
+};
 
-    const response = await login(email, password, isLogin);
-    if (response == false) {
-      setMessage("Credenciales Incorrectas")
-    } else if (isLogin) {
-      localStorage.setItem("token", response.token);
-      setMessage("Inicio de sesión exitoso.");
-      navigate("/home");//reemplazar dashboard por la pagina que vaya luego del login
-    } else {
-      navigate("/login")
-    }
-
-  };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
