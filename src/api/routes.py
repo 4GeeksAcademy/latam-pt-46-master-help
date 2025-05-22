@@ -54,7 +54,7 @@ def handle_login_user():
     if not user.is_active:
         return jsonify({"message": "User is not active"}), 403
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({
         "access_token": access_token,
         "user": user.serialize()
@@ -63,7 +63,7 @@ def handle_login_user():
 @api.route('/categories', methods=['POST'])
 @jwt_required()
 def create_category():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     name = data.get("name")
 
@@ -84,7 +84,7 @@ def create_category():
 @api.route('/categories', methods=['DELETE'])
 @jwt_required()
 def delete_category():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     category_id = data.get("id")
 
@@ -104,7 +104,7 @@ def delete_category():
 @api.route('/categories', methods=['GET'])
 @jwt_required()
 def get_all_categories():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     categories = Category.query.filter_by(user_id=user_id).all()
     return jsonify([cat.serialize() for cat in categories]), 200
 
@@ -112,7 +112,7 @@ def get_all_categories():
 @api.route('/categories/<int:category_id>', methods=['GET'])
 @jwt_required()
 def get_category_by_id(category_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     category = Category.query.filter_by(id=category_id, user_id=user_id).first()
     if not category:
         return jsonify({"error": "Categoría no encontrada"}), 404
