@@ -118,3 +118,22 @@ def get_category_by_id(category_id):
         return jsonify({"error": "Categoría no encontrada"}), 404
 
     return jsonify(category.serialize()), 200
+
+@api.route('/categories/<int:category_id>', methods=['PUT'])
+@jwt_required()
+def update_category(category_id):
+    user_id = int(get_jwt_identity())
+    data = request.get_json()
+    new_name = data.get("name")
+
+    if not new_name:
+        return jsonify({"error": "El nuevo nombre es obligatorio"}), 400
+
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no encontrada"}), 404
+
+    category.name = new_name
+    db.session.commit()
+
+    return jsonify(category.serialize()), 200
