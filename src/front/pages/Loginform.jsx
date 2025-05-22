@@ -38,7 +38,7 @@ export const LoginForm = () => {
     } else if (isLogin) {
       localStorage.setItem("token", response.token);
       setMessage("Inicio de sesión exitoso.");
-      navigate("/dashboard");//reemplazar dashboard por la pagina que vaya luego del login
+      navigate("/home");//reemplazar dashboard por la pagina que vaya luego del login
     } else {
       navigate("/login")
     }
