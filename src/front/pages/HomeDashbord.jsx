@@ -1,6 +1,6 @@
 export const HomeDashbord = () => {
     return (
-        <div className="container">
+        <div className="container mt-5">
             <div>
                 <h1 className="text-center">Bienvenido al Dashboard</h1>
                 <p className="text-center">Aquí puedes gestionar tu información y configuraciones.</p>
