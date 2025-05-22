@@ -81,24 +81,17 @@ def create_category():
     return jsonify(new_category.serialize()), 201
 
 
-@api.route('/categories', methods=['DELETE'])
+@api.route('/categories/<int:category_id>', methods=['DELETE'])
 @jwt_required()
-def delete_category():
+def delete_category(category_id):
     user_id = int(get_jwt_identity())
-    data = request.get_json()
-    category_id = data.get("id")
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
 
-    if not category_id:
-        return jsonify({"error": "ID de categoría es obligatorio"}), 400
-
-    category = Category.query.filter_by(
-        id=category_id, user_id=user_id).first()
     if not category:
         return jsonify({"error": "Categoría no encontrada"}), 404
 
     db.session.delete(category)
     db.session.commit()
-
     return jsonify({"message": "Categoría eliminada correctamente"}), 200
 
 

@@ -43,7 +43,8 @@ class User(db.Model):
 class Process(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
-    category: Mapped[str] = mapped_column(String(120), nullable=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True)
+    category = relationship("Category", back_populates="processes")
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
@@ -92,6 +93,8 @@ class Category(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
 
     user: Mapped["User"] = relationship("User", back_populates="categories")
+
+    processes: Mapped[list["Process"]] = relationship("Process", back_populates="category", cascade="all, delete")
 
     def serialize(self):
         return {
