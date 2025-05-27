@@ -17,7 +17,6 @@ cloudinary.config(
 
 # Crear blueprint y aplicar CORS explícitamente
 api = Blueprint('api', __name__)
-CORS(api, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # ------------------------- AUTH -------------------------
 

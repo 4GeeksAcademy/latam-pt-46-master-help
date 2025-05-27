@@ -19,7 +19,7 @@ h5,
 h6 {
   font-family: "Montserrat", sans-serif;
   color: #ffffff;
-  font-weight: 900  !important;
+  font-weight: 900 !important;
   line-height: 1.2;
 }
 
@@ -89,9 +89,6 @@ a:hover {
 .highlight {
   color: #00bfff;
 }
-
-
-
 
 /* --- ICONOS --- */
 .icon {
@@ -173,4 +170,18 @@ a:hover {
 .btn-outline-light:hover {
   background-color: #00bfff !important;
   color: #121212 !important;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

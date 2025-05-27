@@ -4,8 +4,8 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
-from flask_swagger import swagger
 from flask_cors import CORS
+from flask_swagger import swagger
 from flask_jwt_extended import JWTManager
 
 from api.utils import APIException, generate_sitemap
@@ -15,23 +15,22 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
+static_file_dir = os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), '../public/')
 
 app = Flask(__name__)
-
-# ✅ CORS configurado de forma explícita
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
-
 # ✅ JWT secret
 app.config["JWT_SECRET_KEY"] = "M4st3rH4lp"
 jwt = JWTManager(app)
+CORS(app)
 
 app.url_map.strict_slashes = False
 
 # ✅ Configuración de base de datos
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
+        "postgres://", "postgresql://")
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
@@ -48,11 +47,15 @@ setup_commands(app)
 app.register_blueprint(api, url_prefix='/api')
 
 # ✅ Manejo de errores
+
+
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 # ✅ Sitemap para entorno de desarrollo
+
+
 @app.route('/')
 def sitemap():
     if ENV == "development":
@@ -60,6 +63,8 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 # ✅ Servir archivos estáticos
+
+
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
     if not os.path.isfile(os.path.join(static_file_dir, path)):
@@ -67,6 +72,7 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0
     return response
+
 
 # ✅ Iniciar el servidor
 if __name__ == '__main__':

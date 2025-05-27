@@ -26,28 +26,28 @@ const Navbar = () => {
               to="/#solution-benefits" className="nav-item nav-link">
               <a className="nav-link" href="/#solution-benefits">
                 Beneficios
-                </a>
+              </a>
             </NavHashLink>
 
-                        <NavHashLink
+            <NavHashLink
               to="/#how-it-works" className="nav-item nav-link">
               <a className="nav-link" href="/#how-it-works">
                 Cómo Funciona
-                </a>
+              </a>
             </NavHashLink>
 
-                                  <NavHashLink
+            <NavHashLink
               to="/#use-cases" className="nav-item nav-link">
               <a className="nav-link" href="/#use-cases">
                 Casos de uso
-                </a>
+              </a>
             </NavHashLink>
 
-                                           <NavHashLink
+            <NavHashLink
               to="/#testimonials" className="nav-item nav-link">
               <a className="nav-link" href="/#testimonials">
                 Testimonios
-                </a>
+              </a>
             </NavHashLink>
 
 

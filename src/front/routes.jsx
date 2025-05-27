@@ -14,16 +14,17 @@ import Dashboard from "../front/pages/Dashboard";
 import ProcessDetail from "../front/pages/ProcessDetail";
 import CreateProcess from "../front/pages/CreateProcess";
 import EditarProceso from "../front/pages/EditarProceso";
+import HomeDashbord from "./pages/HomeDashbord";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
       {/* Páginas base */}
       <Route path="/" element={<Home />} />
-      <Route path="/single/:theId" element={<Single />} />
-      <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signin" element={<LoginForm />} />
+      <Route path="/home" element={<HomeDashbord />} />
+
 
       {/* Funcionalidad de procesos */}
       <Route path="/dashboard" element={<Dashboard />} />

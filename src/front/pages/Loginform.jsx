@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/home.css";
-const BACKEND_URL = localStorage.getItem("BACKEND_URL");
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const login = async (email, password, isLogin) => {
   const path = isLogin ? "user/login" : "user/signin";
-const response = await fetch(`${BACKEND_URL}/${path}`, {
+  const response = await fetch(`${BACKEND_URL}/${path}`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: {
       'Content-Type': 'application/json'
     }
   });
-  const data = await response.json();
+  let data = null;
+  const text = await response.text();
+  if (text) {
+    data = JSON.parse(text);
+  }
   if (response.ok) {
     return data;
   } else {
@@ -29,19 +33,19 @@ export const LoginForm = () => {
   const isLogin = location.pathname == "/login";
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const response = await login(email, password, isLogin);
-  if (response == false) {
-    setMessage("Credenciales Incorrectas");
-  } else if (isLogin) {
-    localStorage.setItem("token", response.access_token); // ✅ CORREGIDO
-    setMessage("Inicio de sesión exitoso.");
-    navigate("/dashboard");
-  } else {
-    navigate("/login");
-  }
-};
+    const response = await login(email, password, isLogin);
+    if (response == false) {
+      setMessage("Credenciales Incorrectas");
+    } else if (isLogin) {
+      localStorage.setItem("token", response.access_token); // ✅ CORREGIDO
+      setMessage("Inicio de sesión exitoso.");
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
+  };
 
 
   return (
