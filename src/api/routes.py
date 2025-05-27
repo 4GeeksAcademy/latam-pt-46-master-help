@@ -142,18 +142,26 @@ def update_category(category_id):
 @jwt_required()
 def create_process():
     data = request.get_json()
-    user_id = get_jwt_identity()
-    if not data:
-        return jsonify({"error": "Falta el cuerpo de la solicitud"}), 400
+    user_id = int(get_jwt_identity())
+
+    if not data or not data.get("name") or not data.get("category"):
+        return jsonify({"error": "Faltan campos obligatorios"}), 400
+
+    category = Category.query.filter_by(id=data["category"], user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no válida o no te pertenece"}), 404
 
     new_process = Process(
-        name=data.get("name"),
-        category=data.get("category"),
+        name=data["name"],
+        category_id=category.id,
         user_id=user_id
     )
+
     db.session.add(new_process)
     db.session.commit()
+
     return jsonify(new_process.serialize()), 201
+
 
 
 @api.route('/process', methods=['GET'])
@@ -190,6 +198,22 @@ def delete_process(process_id):
     db.session.delete(process)
     db.session.commit()
     return jsonify({"message": "Proceso eliminado correctamente"}), 200
+
+@api.route('/categories/<int:category_id>/processes', methods=['GET'])
+@jwt_required()
+def get_processes_by_category(category_id):
+    user_id = int(get_jwt_identity())
+
+    
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no encontrada o no te pertenece"}), 404
+
+    
+    processes = Process.query.filter_by(user_id=user_id, category_id=category_id).all()
+
+    return jsonify([p.serialize() for p in processes]), 200
+
 
 # ------------------------- PASOS -------------------------
 
