@@ -138,16 +138,16 @@ def update_category(category_id):
 # ------------------------- PROCESOS -------------------------
 
 
-@api.route('/process/create', methods=['POST'])
+@api.route('/process/create/<int:category_id>', methods=['POST'])
 @jwt_required()
-def create_process():
-    data = request.get_json()
+def create_process(category_id):
     user_id = int(get_jwt_identity())
+    data = request.get_json()
 
-    if not data or not data.get("name") or not data.get("category"):
-        return jsonify({"error": "Faltan campos obligatorios"}), 400
+    if not data or not data.get("name"):
+        return jsonify({"error": "Falta el nombre del proceso"}), 400
 
-    category = Category.query.filter_by(id=data["category"], user_id=user_id).first()
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
     if not category:
         return jsonify({"error": "Categoría no válida o no te pertenece"}), 404
 
@@ -161,6 +161,8 @@ def create_process():
     db.session.commit()
 
     return jsonify(new_process.serialize()), 201
+
+
 
 
 

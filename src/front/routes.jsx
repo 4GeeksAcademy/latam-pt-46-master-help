@@ -28,7 +28,7 @@ export const router = createBrowserRouter(
       {/* Funcionalidad de procesos */}
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/process/:id" element={<ProcessDetail />} />
-      <Route path="/crear-proceso" element={<CreateProcess />} />
+      <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
       <Route path="/editar-proceso/:id" element={<EditarProceso />} />
     </Route>
   )
