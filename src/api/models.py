@@ -41,6 +41,7 @@ class User(db.Model):
 
 
 class Process(db.Model):
+    __tablename__ = "process" 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True)
@@ -55,12 +56,13 @@ class Process(db.Model):
 
     def serialize(self):
         return {
-            "id": self.id,
-            "name": self.name,
-            "category": self.category,
-            "created_at": self.created_at.isoformat(),
-            "user_id": self.user_id
-        }
+        "id": self.id,
+        "name": self.name,
+        "category": self.category.serialize() if self.category else None,
+        "created_at": self.created_at.isoformat(),
+        "user_id": self.user_id
+    }
+
 
 # Modelo de Paso del Proceso
 

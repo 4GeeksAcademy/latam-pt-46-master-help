@@ -1,20 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateProcess = () => {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [steps, setSteps] = useState([]);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { category_id } = useParams();
+
+  // Cargar nombre de la categoría desde backend usando el category_id
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await fetch(`${BACKEND_URL}/categories/${category_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("No se pudo cargar la categoría");
+        const data = await res.json();
+        setCategoryName(data.name);
+      } catch (error) {
+        console.error("Error al cargar categoría:", error);
+        setCategoryName("Categoría no encontrada");
+      }
+    };
+
+    if (category_id) fetchCategory();
+  }, [category_id]);
 
   const handleAddStep = () => {
-    setSteps([
-      ...steps,
-      { label: "", type: "TEXT", content: "", file: null }
-    ]);
+    setSteps([...steps, { label: "", type: "TEXT", content: "", file: null }]);
   };
 
   const handleChangeStep = (i, field, value) => {
@@ -37,23 +58,24 @@ const CreateProcess = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: name.trim(),
-          category: category.trim()
-        })
+          category: parseInt(category_id),
+        }),
       });
 
       if (!res.ok) {
         const errorText = await res.text();
         console.error("Error al crear proceso:", errorText);
-        return alert("No se pudo crear el proceso. Revisa consola.");
+        return alert("No se pudo crear el proceso.");
       }
 
       const data = await res.json();
       const processId = data.id;
 
+      // Subir pasos
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
         const formData = new FormData();
@@ -71,20 +93,19 @@ const CreateProcess = () => {
         const uploadRes = await fetch(`${BACKEND_URL}/step/upload`, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: formData
+          body: formData,
         });
 
         if (!uploadRes.ok) {
           console.error("Error al subir paso:", await uploadRes.text());
-          return alert("No se pudo subir uno de los pasos. Revisa consola.");
+          return alert("No se pudo subir uno de los pasos.");
         }
       }
 
       setMessage("Proceso creado exitosamente.");
       setName("");
-      setCategory("");
       setSteps([]);
     } catch (err) {
       console.error("Error general:", err);
@@ -104,6 +125,8 @@ const CreateProcess = () => {
         </button>
       </div>
 
+      <h5 className="mb-4 text-muted">Categoría: {categoryName}</h5>
+
       {message && <div className="alert alert-success">{message}</div>}
 
       <form onSubmit={handleSubmit}>
@@ -116,14 +139,6 @@ const CreateProcess = () => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label>Categoría</label>
-          <input
-            className="form-control"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </div>
 
         <h4>Pasos</h4>
         {steps.map((step, i) => (
@@ -132,18 +147,14 @@ const CreateProcess = () => {
             <input
               className="form-control mb-2"
               value={step.label}
-              onChange={(e) =>
-                handleChangeStep(i, "label", e.target.value)
-              }
+              onChange={(e) => handleChangeStep(i, "label", e.target.value)}
               required
             />
             <label>Tipo</label>
             <select
               className="form-control mb-2"
               value={step.type}
-              onChange={(e) =>
-                handleChangeStep(i, "type", e.target.value)
-              }
+              onChange={(e) => handleChangeStep(i, "type", e.target.value)}
             >
               <option value="TEXT">Texto</option>
               <option value="IMAGE">Imagen</option>
