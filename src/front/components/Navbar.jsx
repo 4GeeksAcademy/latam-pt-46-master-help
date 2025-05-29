@@ -2,9 +2,11 @@ import React from "react";
 import logo from "../assets/img/master-help-logo-hz.webp";
 import { Link } from "react-router-dom";
 import { NavHashLink } from 'react-router-hash-link';
+import "/workspaces/latam-pt-46-master-help/src/front/index.css";
 
 
 const Navbar = () => {
+  
   return (
     <nav className="navbar navbar-expand-lg fixed-top custom-navbar custom-toggler">
       <div className="container">
@@ -52,16 +54,15 @@ const Navbar = () => {
 
 
           </ul>
+
           <div className="d-flex ms-lg-3">
             <Link to="/login" className="btn btn-outline-light me-2">
               Iniciar Sesión
-            </Link>
-            <Link to="/dashboard" className="btn btn-outline-light me-2">
-              Mis procesos
-            </Link>
+            </Link>           
             <Link to="/signin" className="btn btn-primary">
               Registrate
             </Link>
+
           </div>
         </div>
       </div>

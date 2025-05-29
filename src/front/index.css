@@ -203,3 +203,25 @@ body,
 .process-items-container::-webkit-scrollbar-track {
   background-color: transparent; /* Make track transparent */
 }
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  height: 40px;
+  border-radius: 30px;
+  padding-left: 55px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
