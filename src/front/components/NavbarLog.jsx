@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { NavHashLink } from 'react-router-hash-link';
 import "/workspaces/latam-pt-46-master-help/src/front/index.css";
 
-
 const Navbar = () => {
   const [isFocused, setIsFocused] = useState(false);
   
@@ -23,23 +22,24 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-            <Link to="/dashboard" className="btn btn-outline-light me-2">
-              Mis procesos
-            </Link>
-           <div className="d-flex align-items-center ms-lg-3 me-3">
-            <div className="search-container">
-              <input
-                type="text"
-                className="form-control search-input"
-                placeholder={isFocused ? "" : "      Buscar..."}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-              />
-              {!isFocused && <i className="fas fa-search search-icon"></i>}
-              </div>
-            </div>
+        <Link to="/dashboard" className="btn btn-outline-light me-2">
+          Mis procesos
+        </Link>
+
+        <div className="d-flex align-items-center ms-lg-3 me-3">
+          <div className="search-container">
+            <input
+              type="text"
+              className="form-control search-input"
+              placeholder={isFocused ? "" : "      Buscar..."}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
+            {!isFocused && <i className="fas fa-search search-icon"></i>}
+          </div>
         </div>
-      </div>
+
+      </div> {/* Cierra correctamente el div.container */}
     </nav>
   );
 };
