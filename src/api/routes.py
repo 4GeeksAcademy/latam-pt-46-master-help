@@ -84,7 +84,8 @@ def create_category():
 @jwt_required()
 def delete_category(category_id):
     user_id = int(get_jwt_identity())
-    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    category = Category.query.filter_by(
+        id=category_id, user_id=user_id).first()
 
     if not category:
         return jsonify({"error": "Categoría no encontrada"}), 404
@@ -146,7 +147,8 @@ def create_process(category_id):
     if not data or not data.get("name"):
         return jsonify({"error": "Falta el nombre del proceso"}), 400
 
-    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    category = Category.query.filter_by(
+        id=category_id, user_id=user_id).first()
     if not category:
         return jsonify({"error": "Categoría no válida o no te pertenece"}), 404
 
@@ -160,9 +162,6 @@ def create_process(category_id):
     db.session.commit()
 
     return jsonify(new_process.serialize()), 201
-
-
-
 
 
 @api.route('/process', methods=['GET'])
@@ -200,18 +199,19 @@ def delete_process(process_id):
     db.session.commit()
     return jsonify({"message": "Proceso eliminado correctamente"}), 200
 
+
 @api.route('/categories/<int:category_id>/processes', methods=['GET'])
 @jwt_required()
 def get_processes_by_category(category_id):
     user_id = int(get_jwt_identity())
 
-    
-    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    category = Category.query.filter_by(
+        id=category_id, user_id=user_id).first()
     if not category:
         return jsonify({"error": "Categoría no encontrada o no te pertenece"}), 404
 
-    
-    processes = Process.query.filter_by(user_id=user_id, category_id=category_id).all()
+    processes = Process.query.filter_by(
+        user_id=user_id, category_id=category_id).all()
 
     return jsonify([p.serialize() for p in processes]), 200
 
@@ -254,3 +254,22 @@ def upload_step():
     db.session.add(step)
     db.session.commit()
     return jsonify(step.serialize()), 201
+
+
+# ------------------------- Autocomplete -------------------------
+
+@api.route('/autocomplete', methods=['POST'])
+@jwt_required()
+def handle_autocomplete():
+    user_id = int(get_jwt_identity())
+    data = request.get_json()
+    if not data or not data.get("text"):
+        return jsonify({"error": "Falta el texto para autocompletar"}), 400
+
+    text = data["text"]
+    processes = Process.query.filter(
+        Process.user_id == user_id,
+        Process.name.ilike(f"%{text}%")
+    ).all()
+
+    return jsonify([p.serialize() for p in processes]), 200
