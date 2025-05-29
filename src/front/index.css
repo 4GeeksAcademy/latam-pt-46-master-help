@@ -185,3 +185,21 @@ body,
   display: flex;
   flex-direction: column;
 }
+
+/* src/index.css or similar */
+.process-item:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important; /* Subtle hover */
+  /* transition: background-color 0.2s ease-in-out; */ /* Smooth transition */
+}
+
+/* Style for scrollbar if using maxHeight, optional */
+.process-items-container::-webkit-scrollbar {
+  width: 8px;
+}
+.process-items-container::-webkit-scrollbar-thumb {
+  background-color: #ced4da; /* Light grey scrollbar */
+  border-radius: 4px;
+}
+.process-items-container::-webkit-scrollbar-track {
+  background-color: transparent; /* Make track transparent */
+}
