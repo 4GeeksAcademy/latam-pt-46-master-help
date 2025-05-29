@@ -11,7 +11,7 @@ const CreateProcess = () => {
   const navigate = useNavigate();
   const { category_id } = useParams();
 
-  // Cargar nombre de la categoría desde backend usando el category_id
+  // 🔄 Cargar nombre de categoría al montar
   useEffect(() => {
     const fetchCategory = async () => {
       const token = localStorage.getItem("token");
@@ -54,16 +54,14 @@ const CreateProcess = () => {
     }
 
     try {
-      const res = await fetch(`${BACKEND_URL}/process/create`, {
+      // ✅ Cambiar URL para incluir category_id
+      const res = await fetch(`${BACKEND_URL}/process/create/${category_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: name.trim(),
-          category: parseInt(category_id),
-        }),
+        body: JSON.stringify({ name: name.trim() }),
       });
 
       if (!res.ok) {
@@ -75,7 +73,7 @@ const CreateProcess = () => {
       const data = await res.json();
       const processId = data.id;
 
-      // Subir pasos
+      // 🚀 Subir pasos uno por uno
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
         const formData = new FormData();
@@ -119,7 +117,7 @@ const CreateProcess = () => {
         <h2>Crear Nuevo Proceso</h2>
         <button
           className="btn btn-outline-secondary"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/home")}
         >
           ← Volver al Dashboard
         </button>
