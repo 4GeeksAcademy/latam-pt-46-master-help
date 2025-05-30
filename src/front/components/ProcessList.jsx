@@ -15,9 +15,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     try {
       const res = await fetch(`${BACKEND_URL}/process/${processId}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
@@ -25,7 +23,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
         alert(`Error al eliminar: ${errorText}`);
       } else {
         alert("Proceso eliminado correctamente.");
-        window.location.reload(); // o puedes llamar a una función de refetch
+        window.location.reload();
       }
     } catch (err) {
       alert("Error al eliminar el proceso.");
@@ -33,7 +31,8 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     }
   };
 
-  const handleInfoClick = (processId) => {
+  const handleInfoClick = (processId, e) => {
+    e?.stopPropagation();
     navigate(`/process/${processId}`);
   };
 
@@ -60,20 +59,20 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     );
   } else if (fetched && processes.length > 0) {
     content = (
-      <div className="row g-3">
-        {processes.map(process => (
+      <div className="row g-4">
+        {processes.map((process) => (
           <div key={process.id} className="col-md-6">
             <div
-              className="card shadow-sm h-100"
+              className="card card-dark h-100 process-item"
               onClick={() => handleInfoClick(process.id)}
               style={{ cursor: "pointer" }}
             >
               <div className="card-body d-flex justify-content-between align-items-center">
-                <span className="fs-5 text-dark">{process.name}</span>
-                <div className="btn-group" role="group">
+                <span className="fs-5 text-white">{process.name}</span>
+                <div className="btn-group">
                   <button
                     type="button"
-                    className="btn btn-outline-info btn-sm"
+                    className="btn btn-outline-light btn-sm btn-glow"
                     onClick={(e) => handleInfoClick(process.id, e)}
                     title="Ver Información"
                   >
@@ -81,7 +80,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline-danger btn-sm"
+                    className="btn btn-outline-light btn-sm btn-glow"
                     onClick={(e) => handleDeleteClick(process.id, process.name, e)}
                     title="Eliminar Proceso"
                   >
@@ -109,7 +108,10 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
       {content}
       {showCreateButton && (
         <div className="mt-4 text-end">
-          <Link to={`/crear-proceso/${categoryId}`} className="btn btn-primary">
+          <Link
+            to={`/crear-proceso/${categoryId}`}
+            className="btn btn-primary btn-glow"
+          >
             <i className="bi bi-plus-lg me-2"></i>
             Agregar Nuevo Proceso
           </Link>

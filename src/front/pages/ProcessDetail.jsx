@@ -6,7 +6,11 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const StepContent = ({ step }) => {
   switch (step.type) {
     case "TEXT":
-      return <p className="card-text">{step.content}</p>;
+      return (
+        <p className="card-text text-body">
+          {step.content}
+        </p>
+      );
 
     case "IMAGE":
       return (
@@ -108,13 +112,16 @@ const ProcessDetail = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Proceso: {process.name}</h2>
-        <button className="btn btn-outline-secondary" onClick={() => navigate("/home")}>
+        <h2 className="text-white">Proceso: {process.name}</h2>
+        <button
+          className="btn btn-outline-light"
+          onClick={() => navigate("/home")}
+        >
           ← Volver al Dashboard
         </button>
       </div>
 
-      <h5 className="text-muted mb-4">
+      <h5 className="text-light-emphasis mb-4">
         Categoría: {process.category?.name || "Sin categoría"}
       </h5>
 
@@ -123,9 +130,11 @@ const ProcessDetail = () => {
           const isMedia = ["IMAGE", "VIDEO", "VIDEO_URL"].includes(step.type);
           return (
             <div key={idx} className={isMedia ? "col-md-6 mb-4" : "col-12 mb-4"}>
-              <div className="card h-100 shadow-sm border-0">
+              <div className="card card-dark h-100 shadow-sm border-0">
                 <div className="card-body">
-                  <h5 className="card-title">Paso {idx + 1}: {step.label}</h5>
+                  <h5 className="card-title text-primary">
+                    Paso {idx + 1}: {step.label}
+                  </h5>
                   <StepContent step={step} />
                 </div>
               </div>
