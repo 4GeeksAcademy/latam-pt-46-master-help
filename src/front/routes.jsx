@@ -24,7 +24,6 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
       {/* Páginas base */}
       <Route path="/" element={<Home />} />
-<<<<<<< HEAD
       <Route path="/single/:theId" element={<Single />} />
       <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<LoginForm />} />
@@ -34,7 +33,6 @@ export const router = createBrowserRouter(
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/process/:id" element={<ProcessDetail />} />
       <Route path="/crear-proceso" element={<CreateProcess />} />
-=======
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signin" element={<LoginForm />} />
       <Route path="/home" element={<HomeDashbord />} />
@@ -44,7 +42,6 @@ export const router = createBrowserRouter(
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/process/:id" element={<ProcessDetail />} />
       <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
->>>>>>> development
       <Route path="/editar-proceso/:id" element={<EditarProceso />} />
     </Route>
   )
