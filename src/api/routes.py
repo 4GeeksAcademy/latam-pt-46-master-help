@@ -2,7 +2,11 @@ from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
+<<<<<<< HEAD
 from api.models import db, User, Process, Step, StepType
+=======
+from api.models import db, User, Process, Step, StepType, Category
+>>>>>>> development
 import cloudinary.uploader
 import cloudinary
 from cloudinary.utils import cloudinary_url
@@ -11,13 +15,22 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dti9epq5d",
     api_key="677486956793833",
+<<<<<<< HEAD
     api_secret="AQUÍ_TU_API_SECRET_REAL",  # ← reemplaza esto por tu secreto real
+=======
+    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  # ← reemplaza esto por tu secreto real
+>>>>>>> development
     secure=True
 )
 
 # Crear blueprint y aplicar CORS explícitamente
 api = Blueprint('api', __name__)
+<<<<<<< HEAD
 CORS(api, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+=======
+
+# ------------------------- AUTH -------------------------
+>>>>>>> development
 
 # ------------------------- AUTH -------------------------
 
@@ -36,7 +49,12 @@ def handle_register_new_user():
         return jsonify({"message": "Password must be at least 6 characters"}), 400
 
     hashed_password = generate_password_hash(request_body["password"])
+<<<<<<< HEAD
     user = User(email=request_body["email"], password=hashed_password, is_active=True)
+=======
+    user = User(email=request_body["email"],
+                password=hashed_password, is_active=True)
+>>>>>>> development
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialize()), 201
@@ -51,12 +69,17 @@ def handle_login_user():
     if not user.is_active:
         return jsonify({"message": "User is not active"}), 403
 
+<<<<<<< HEAD
     access_token = create_access_token(identity=str(user.id))  # importante: convertir a str
+=======
+    access_token = create_access_token(identity=str(user.id))
+>>>>>>> development
     return jsonify({
         "access_token": access_token,
         "user": user.serialize()
     }), 200
 
+<<<<<<< HEAD
 # ------------------------- PROCESOS -------------------------
 
 @api.route('/process/create', methods=['POST'])
@@ -77,6 +100,115 @@ def create_process():
     return jsonify(new_process.serialize()), 201
 
 
+=======
+
+@api.route('/categories', methods=['POST'])
+@jwt_required()
+def create_category():
+    user_id = int(get_jwt_identity())
+    data = request.get_json()
+    name = data.get("name")
+
+    if not name:
+        return jsonify({"error": "El nombre es obligatorio"}), 400
+
+    existing = Category.query.filter_by(name=name, user_id=user_id).first()
+    if existing:
+        return jsonify({"error": "La categoría ya existe"}), 409
+
+    new_category = Category(name=name, user_id=user_id)
+    db.session.add(new_category)
+    db.session.commit()
+
+    return jsonify(new_category.serialize()), 201
+
+
+@api.route('/categories/<int:category_id>', methods=['DELETE'])
+@jwt_required()
+def delete_category(category_id):
+    user_id = int(get_jwt_identity())
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+
+    if not category:
+        return jsonify({"error": "Categoría no encontrada"}), 404
+
+    db.session.delete(category)
+    db.session.commit()
+    return jsonify({"message": "Categoría eliminada correctamente"}), 200
+
+
+@api.route('/categories', methods=['GET'])
+@jwt_required()
+def get_all_categories():
+    user_id = int(get_jwt_identity())
+    categories = Category.query.filter_by(user_id=user_id).all()
+    return jsonify([cat.serialize() for cat in categories]), 200
+
+
+@api.route('/categories/<int:category_id>', methods=['GET'])
+@jwt_required()
+def get_category_by_id(category_id):
+    user_id = int(get_jwt_identity())
+    category = Category.query.filter_by(
+        id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no encontrada"}), 404
+
+    return jsonify(category.serialize()), 200
+
+
+@api.route('/categories/<int:category_id>', methods=['PUT'])
+@jwt_required()
+def update_category(category_id):
+    user_id = int(get_jwt_identity())
+    data = request.get_json()
+    new_name = data.get("name")
+
+    if not new_name:
+        return jsonify({"error": "El nuevo nombre es obligatorio"}), 400
+
+    category = Category.query.filter_by(
+        id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no encontrada"}), 404
+
+    category.name = new_name
+    db.session.commit()
+
+    return jsonify(category.serialize()), 200
+
+# ------------------------- PROCESOS -------------------------
+
+
+@api.route('/process/create/<int:category_id>', methods=['POST'])
+@jwt_required()
+def create_process(category_id):
+    user_id = int(get_jwt_identity())
+    data = request.get_json()
+
+    if not data or not data.get("name"):
+        return jsonify({"error": "Falta el nombre del proceso"}), 400
+
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no válida o no te pertenece"}), 404
+
+    new_process = Process(
+        name=data["name"],
+        category_id=category.id,
+        user_id=user_id
+    )
+
+    db.session.add(new_process)
+    db.session.commit()
+
+    return jsonify(new_process.serialize()), 201
+
+
+
+
+
+>>>>>>> development
 @api.route('/process', methods=['GET'])
 @jwt_required()
 def get_user_processes():
@@ -112,6 +244,25 @@ def delete_process(process_id):
     db.session.commit()
     return jsonify({"message": "Proceso eliminado correctamente"}), 200
 
+<<<<<<< HEAD
+=======
+@api.route('/categories/<int:category_id>/processes', methods=['GET'])
+@jwt_required()
+def get_processes_by_category(category_id):
+    user_id = int(get_jwt_identity())
+
+    
+    category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+    if not category:
+        return jsonify({"error": "Categoría no encontrada o no te pertenece"}), 404
+
+    
+    processes = Process.query.filter_by(user_id=user_id, category_id=category_id).all()
+
+    return jsonify([p.serialize() for p in processes]), 200
+
+
+>>>>>>> development
 # ------------------------- PASOS -------------------------
 
 @api.route('/step/upload', methods=['POST'])
@@ -128,7 +279,11 @@ def upload_step():
     if step_type in ["IMAGE", "PDF", "VIDEO"]:
         if "file" not in request.files:
             return jsonify({"error": "Archivo no encontrado"}), 400
+<<<<<<< HEAD
         upload_result = cloudinary.uploader.upload_large(
+=======
+        upload_result = cloudinary.uploader.upload(
+>>>>>>> development
             request.files["file"],
             resource_type="auto"
         )

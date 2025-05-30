@@ -92,6 +92,7 @@ a:hover {
   font-weight: 600;
   border-radius: 0.3rem;
   transition: all 0.3s ease;
+    color: #ffffff;
 }
 
 .btn-primary {
@@ -166,8 +167,8 @@ a:hover {
 
 /* === NAVBAR PERSONALIZADO === */
 .custom-navbar {
-  background-color: #121212;
-  border-bottom: 1px solid #2a2a2a;
+  background-color: #12121288;
+  border-bottom: 1px solid #00BFFF;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: all 0.3s ease;
@@ -175,7 +176,7 @@ a:hover {
 
 
 .custom-navbar .navbar-brand img {
-  max-height: 70px;
+  max-height: 50px;
 }
 
 .custom-navbar .nav-link {
