@@ -12,6 +12,13 @@ const ProcessDetail = () => {
 
   const fetchProcessDetail = async () => {
     const token = localStorage.getItem("token");
+    console.log("🟡 ID del proceso:", id);
+    console.log("🟡 Token:", token);
+
+    if (!token) {
+      setError("No hay token de autenticación.");
+      return;
+    }
 
     try {
       const res = await fetch(`${BACKEND_URL}/process/${id}`, {
@@ -22,8 +29,8 @@ const ProcessDetail = () => {
 
       if (!res.ok) {
         const text = await res.text();
-        console.error("Error al obtener el proceso:", text);
-        setError("No se pudo cargar el proceso.");
+        console.error("❌ Error al obtener el proceso:", text);
+        setError("No se pudo cargar el proceso. Verifica que tengas acceso.");
         return;
       }
 
@@ -31,28 +38,35 @@ const ProcessDetail = () => {
       setProcess(data.process);
       setSteps(data.steps);
     } catch (err) {
-      console.error("Error de red:", err);
+      console.error("⚠️ Error de red:", err);
       setError("Ocurrió un error inesperado al cargar los datos.");
     }
   };
 
   useEffect(() => {
-    fetchProcessDetail();
+    if (id) fetchProcessDetail();
   }, [id]);
 
-  if (error) return <div className="alert alert-danger mt-5">{error}</div>;
-  if (!process) return <div className="text-center mt-5">Cargando proceso...</div>;
+  if (error) {
+    return <div className="alert alert-danger mt-5 text-center">{error}</div>;
+  }
+
+  if (!process) {
+    return <div className="text-center mt-5">Cargando proceso...</div>;
+  }
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Proceso: {process.name}</h2>
-        <button className="btn btn-outline-secondary" onClick={() => navigate("/dashboard")}>
+        <button className="btn btn-outline-secondary" onClick={() => navigate("/home")}>
           ← Volver al Dashboard
         </button>
       </div>
 
-      <h5 className="text-muted mb-4">Categoría: {process.category}</h5>
+      <h5 className="text-muted mb-4">
+        Categoría: {process.category?.name || "Sin categoría"}
+      </h5>
 
       <div>
         {steps.map((step, idx) => (

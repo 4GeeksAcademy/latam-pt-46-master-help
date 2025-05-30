@@ -11,7 +11,7 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dti9epq5d",
     api_key="677486956793833",
-    api_secret="AQUÍ_TU_API_SECRET_REAL",  # ← reemplaza esto por tu secreto real
+    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  # ← reemplaza esto por tu secreto real
     secure=True
 )
 
@@ -218,7 +218,6 @@ def get_processes_by_category(category_id):
 
 # ------------------------- PASOS -------------------------
 
-
 @api.route('/step/upload', methods=['POST'])
 @jwt_required()
 def upload_step():
@@ -233,7 +232,7 @@ def upload_step():
     if step_type in ["IMAGE", "PDF", "VIDEO"]:
         if "file" not in request.files:
             return jsonify({"error": "Archivo no encontrado"}), 400
-        upload_result = cloudinary.uploader.upload_large(
+        upload_result = cloudinary.uploader.upload(
             request.files["file"],
             resource_type="auto"
         )
