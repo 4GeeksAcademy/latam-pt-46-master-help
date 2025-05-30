@@ -14,10 +14,7 @@ import Dashboard from "../front/pages/Dashboard";
 import ProcessDetail from "../front/pages/ProcessDetail";
 import CreateProcess from "../front/pages/CreateProcess";
 import EditarProceso from "../front/pages/EditarProceso";
-<<<<<<< HEAD
-=======
 import HomeDashbord from "./pages/HomeDashbord";
->>>>>>> development
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,15 +28,7 @@ export const router = createBrowserRouter(
 
       {/* Funcionalidad de procesos */}
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/process/:id" element={<ProcessDetail />} />
-      <Route path="/crear-proceso" element={<CreateProcess />} />
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/signin" element={<LoginForm />} />
       <Route path="/home" element={<HomeDashbord />} />
-
-
-      {/* Funcionalidad de procesos */}
-      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/process/:id" element={<ProcessDetail />} />
       <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
       <Route path="/editar-proceso/:id" element={<EditarProceso />} />

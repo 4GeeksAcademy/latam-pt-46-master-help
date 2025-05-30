@@ -1,27 +1,10 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-=======
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
->>>>>>> development
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateProcess = () => {
   const [name, setName] = useState("");
-<<<<<<< HEAD
-  const [category, setCategory] = useState("");
-  const [steps, setSteps] = useState([]);
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-
-  const handleAddStep = () => {
-    setSteps([
-      ...steps,
-      { label: "", type: "TEXT", content: "", file: null }
-    ]);
-=======
   const [categoryName, setCategoryName] = useState("");
   const [steps, setSteps] = useState([]);
   const [message, setMessage] = useState("");
@@ -52,7 +35,6 @@ const CreateProcess = () => {
 
   const handleAddStep = () => {
     setSteps([...steps, { label: "", type: "TEXT", content: "", file: null }]);
->>>>>>> development
   };
 
   const handleChangeStep = (i, field, value) => {
@@ -71,18 +53,6 @@ const CreateProcess = () => {
     }
 
     try {
-<<<<<<< HEAD
-      const res = await fetch(`${BACKEND_URL}/process/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          category: category.trim()
-        })
-=======
       const res = await fetch(`${BACKEND_URL}/process/create/${category_id}`, {
         method: "POST",
         headers: {
@@ -90,17 +60,12 @@ const CreateProcess = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name: name.trim() }),
->>>>>>> development
       });
 
       if (!res.ok) {
         const errorText = await res.text();
         console.error("Error al crear proceso:", errorText);
-<<<<<<< HEAD
-        return alert("No se pudo crear el proceso. Revisa consola.");
-=======
         return alert("No se pudo crear el proceso.");
->>>>>>> development
       }
 
       const data = await res.json();
@@ -123,33 +88,19 @@ const CreateProcess = () => {
         const uploadRes = await fetch(`${BACKEND_URL}/step/upload`, {
           method: "POST",
           headers: {
-<<<<<<< HEAD
-            Authorization: `Bearer ${token}`
-          },
-          body: formData
-=======
             Authorization: `Bearer ${token}`,
           },
           body: formData,
->>>>>>> development
         });
 
         if (!uploadRes.ok) {
           console.error("Error al subir paso:", await uploadRes.text());
-<<<<<<< HEAD
-          return alert("No se pudo subir uno de los pasos. Revisa consola.");
-=======
           return alert("No se pudo subir uno de los pasos.");
->>>>>>> development
         }
       }
 
       setMessage("Proceso creado exitosamente.");
       setName("");
-<<<<<<< HEAD
-      setCategory("");
-=======
->>>>>>> development
       setSteps([]);
     } catch (err) {
       console.error("Error general:", err);
@@ -163,21 +114,14 @@ const CreateProcess = () => {
         <h2>Crear Nuevo Proceso</h2>
         <button
           className="btn btn-outline-secondary"
-<<<<<<< HEAD
-          onClick={() => navigate("/dashboard")}
-=======
           onClick={() => navigate("/home")}
->>>>>>> development
         >
           ← Volver al Dashboard
         </button>
       </div>
 
-<<<<<<< HEAD
-=======
       <h5 className="mb-4 text-muted">Categoría: {categoryName}</h5>
 
->>>>>>> development
       {message && <div className="alert alert-success">{message}</div>}
 
       <form onSubmit={handleSubmit}>
@@ -190,17 +134,6 @@ const CreateProcess = () => {
             required
           />
         </div>
-<<<<<<< HEAD
-        <div className="mb-4">
-          <label>Categoría</label>
-          <input
-            className="form-control"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </div>
-=======
->>>>>>> development
 
         <h4>Pasos</h4>
         {steps.map((step, i) => (
@@ -209,26 +142,14 @@ const CreateProcess = () => {
             <input
               className="form-control mb-2"
               value={step.label}
-<<<<<<< HEAD
-              onChange={(e) =>
-                handleChangeStep(i, "label", e.target.value)
-              }
-=======
               onChange={(e) => handleChangeStep(i, "label", e.target.value)}
->>>>>>> development
               required
             />
             <label>Tipo</label>
             <select
               className="form-control mb-2"
               value={step.type}
-<<<<<<< HEAD
-              onChange={(e) =>
-                handleChangeStep(i, "type", e.target.value)
-              }
-=======
               onChange={(e) => handleChangeStep(i, "type", e.target.value)}
->>>>>>> development
             >
               <option value="TEXT">Texto</option>
               <option value="IMAGE">Imagen</option>

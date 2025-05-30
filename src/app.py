@@ -3,10 +3,6 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_swagger import swagger
-<<<<<<< HEAD
-from flask_cors import CORS
-=======
->>>>>>> development
 from flask_jwt_extended import JWTManager
 
 from api.utils import APIException, generate_sitemap
@@ -27,8 +23,6 @@ CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = "M4st3rH4lp"
 jwt = JWTManager(app)
 
-<<<<<<< HEAD
-=======
 # ✅ Configuración de CORS global
 CORS(app, resources={r"/api/*": {"origins": ["https://symmetrical-space-giggle-pgg5gxgg6rw36769-3000.app.github.dev"]}},
      supports_credentials=True,
@@ -44,7 +38,6 @@ def add_cors_headers(response):
     response.headers["Access-Control-Allow-Credentials"] = "true"
     return response
 
->>>>>>> development
 app.url_map.strict_slashes = False
 
 # ✅ Configuración de base de datos
@@ -66,11 +59,7 @@ setup_commands(app)
 # ✅ Rutas de API
 app.register_blueprint(api, url_prefix='/api')
 
-<<<<<<< HEAD
-# ✅ Manejo de errores
-=======
 # ✅ Manejo de errores personalizados
->>>>>>> development
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code

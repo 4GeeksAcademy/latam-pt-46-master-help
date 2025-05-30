@@ -2,11 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
-<<<<<<< HEAD
-from api.models import db, User, Process, Step, StepType
-=======
 from api.models import db, User, Process, Step, StepType, Category
->>>>>>> development
 import cloudinary.uploader
 import cloudinary
 from cloudinary.utils import cloudinary_url
@@ -15,22 +11,14 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dti9epq5d",
     api_key="677486956793833",
-<<<<<<< HEAD
-    api_secret="AQUÍ_TU_API_SECRET_REAL",  # ← reemplaza esto por tu secreto real
-=======
     api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  # ← reemplaza esto por tu secreto real
->>>>>>> development
     secure=True
 )
 
 # Crear blueprint y aplicar CORS explícitamente
 api = Blueprint('api', __name__)
-<<<<<<< HEAD
-CORS(api, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-=======
 
 # ------------------------- AUTH -------------------------
->>>>>>> development
 
 # ------------------------- AUTH -------------------------
 
@@ -49,12 +37,8 @@ def handle_register_new_user():
         return jsonify({"message": "Password must be at least 6 characters"}), 400
 
     hashed_password = generate_password_hash(request_body["password"])
-<<<<<<< HEAD
-    user = User(email=request_body["email"], password=hashed_password, is_active=True)
-=======
     user = User(email=request_body["email"],
                 password=hashed_password, is_active=True)
->>>>>>> development
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialize()), 201
@@ -69,38 +53,12 @@ def handle_login_user():
     if not user.is_active:
         return jsonify({"message": "User is not active"}), 403
 
-<<<<<<< HEAD
-    access_token = create_access_token(identity=str(user.id))  # importante: convertir a str
-=======
     access_token = create_access_token(identity=str(user.id))
->>>>>>> development
     return jsonify({
         "access_token": access_token,
         "user": user.serialize()
     }), 200
 
-<<<<<<< HEAD
-# ------------------------- PROCESOS -------------------------
-
-@api.route('/process/create', methods=['POST'])
-@jwt_required()
-def create_process():
-    data = request.get_json()
-    user_id = get_jwt_identity()
-    if not data:
-        return jsonify({"error": "Falta el cuerpo de la solicitud"}), 400
-
-    new_process = Process(
-        name=data.get("name"),
-        category=data.get("category"),
-        user_id=user_id
-    )
-    db.session.add(new_process)
-    db.session.commit()
-    return jsonify(new_process.serialize()), 201
-
-
-=======
 
 @api.route('/categories', methods=['POST'])
 @jwt_required()
@@ -208,7 +166,6 @@ def create_process(category_id):
 
 
 
->>>>>>> development
 @api.route('/process', methods=['GET'])
 @jwt_required()
 def get_user_processes():
@@ -244,8 +201,6 @@ def delete_process(process_id):
     db.session.commit()
     return jsonify({"message": "Proceso eliminado correctamente"}), 200
 
-<<<<<<< HEAD
-=======
 @api.route('/categories/<int:category_id>/processes', methods=['GET'])
 @jwt_required()
 def get_processes_by_category(category_id):
@@ -262,7 +217,6 @@ def get_processes_by_category(category_id):
     return jsonify([p.serialize() for p in processes]), 200
 
 
->>>>>>> development
 # ------------------------- PASOS -------------------------
 
 @api.route('/step/upload', methods=['POST'])
@@ -279,11 +233,7 @@ def upload_step():
     if step_type in ["IMAGE", "PDF", "VIDEO"]:
         if "file" not in request.files:
             return jsonify({"error": "Archivo no encontrado"}), 400
-<<<<<<< HEAD
-        upload_result = cloudinary.uploader.upload_large(
-=======
         upload_result = cloudinary.uploader.upload(
->>>>>>> development
             request.files["file"],
             resource_type="auto"
         )
