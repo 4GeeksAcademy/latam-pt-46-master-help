@@ -3,6 +3,58 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+const StepContent = ({ step }) => {
+  switch (step.type) {
+    case "TEXT":
+      return <p className="card-text">{step.content}</p>;
+
+    case "IMAGE":
+      return (
+        <img
+          src={step.content}
+          alt="Paso imagen"
+          className="img-fluid rounded border"
+          style={{ objectFit: "cover", maxHeight: "320px", width: "100%" }}
+        />
+      );
+
+    case "VIDEO":
+      return (
+        <video className="w-100 rounded" controls>
+          <source src={step.content} type="video/mp4" />
+          Tu navegador no soporta video HTML5.
+        </video>
+      );
+
+    case "VIDEO_URL":
+      return (
+        <div className="ratio ratio-16x9">
+          <iframe
+            src={step.content}
+            title="Paso video"
+            allowFullScreen
+            className="rounded"
+          ></iframe>
+        </div>
+      );
+
+    case "PDF":
+      return (
+        <a
+          href={step.content}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-outline-primary mt-2"
+        >
+          Ver documento PDF
+        </a>
+      );
+
+    default:
+      return <p className="text-muted">Tipo de contenido no soportado.</p>;
+  }
+};
+
 const ProcessDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,8 +64,6 @@ const ProcessDetail = () => {
 
   const fetchProcessDetail = async () => {
     const token = localStorage.getItem("token");
-    console.log("🟡 ID del proceso:", id);
-    console.log("🟡 Token:", token);
 
     if (!token) {
       setError("No hay token de autenticación.");
@@ -68,41 +118,20 @@ const ProcessDetail = () => {
         Categoría: {process.category?.name || "Sin categoría"}
       </h5>
 
-      <div>
-        {steps.map((step, idx) => (
-          <div key={idx} className="mb-4 p-3 border rounded bg-light">
-            <h5>Paso {idx + 1}: {step.label}</h5>
-
-            {step.type === "TEXT" && <p>{step.content}</p>}
-
-            {step.type === "VIDEO_URL" && (
-              <div className="ratio ratio-16x9">
-                <iframe
-                  src={step.content}
-                  title={`video-${idx}`}
-                  allowFullScreen
-                ></iframe>
+      <div className="row">
+        {steps.map((step, idx) => {
+          const isMedia = ["IMAGE", "VIDEO", "VIDEO_URL"].includes(step.type);
+          return (
+            <div key={idx} className={isMedia ? "col-md-6 mb-4" : "col-12 mb-4"}>
+              <div className="card h-100 shadow-sm border-0">
+                <div className="card-body">
+                  <h5 className="card-title">Paso {idx + 1}: {step.label}</h5>
+                  <StepContent step={step} />
+                </div>
               </div>
-            )}
-
-            {step.type === "IMAGE" && (
-              <img src={step.content} alt="Paso imagen" className="img-fluid" />
-            )}
-
-            {step.type === "PDF" && (
-              <a href={step.content} target="_blank" rel="noreferrer">
-                Ver PDF
-              </a>
-            )}
-
-            {step.type === "VIDEO" && (
-              <video className="w-100" controls>
-                <source src={step.content} type="video/mp4" />
-                Tu navegador no soporta video HTML5.
-              </video>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
