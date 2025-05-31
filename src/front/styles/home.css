@@ -277,7 +277,7 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
 .search-input {
   height: 40px;
   border-radius: 30px;
-  padding-left: 55px;
+  padding-left: 40px; /* Aumentamos el espacio para que no se encime */
   border: none;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -285,11 +285,12 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
 .search-icon {
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 14px; /* Colocamos la lupa a la izquierda del texto */
   transform: translateY(-50%);
   color: #888;
   pointer-events: none;
 }
+
 
 /* === PROCESOS === */
 .process-item {

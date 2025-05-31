@@ -260,24 +260,31 @@ background: linear-gradient(to right, #000000, rgba(0, 191, 255, 0.1));
 .search-container {
   position: relative;
   width: 100%;
+  max-width: 250px;
 }
 
 .search-input {
   height: 40px;
+  width: 100%;
   border-radius: 30px;
-  padding-left: 55px;
+  padding-left: 48px; /* más espacio para la lupa */
+  padding-right: 10px;
   border: none;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
 }
 
 .search-icon {
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 16px;
   transform: translateY(-50%);
   color: #888;
+  font-size: 16px;
   pointer-events: none;
 }
+
+
 
 /* === PROCESOS === */
 .process-item {
@@ -339,3 +346,17 @@ background: linear-gradient(to right, #000000, rgba(0, 191, 255, 0.1));
 .step-content {
   color: #e0e0e0 !important; /* blanco suave */
 }
+@media (max-width: 991.98px) {
+  .navbar .navbar-brand {
+    margin: 0 auto !important;
+    text-align: center;
+    display: block;
+  }
+
+  .navbar .navbar-toggler {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+}
+
