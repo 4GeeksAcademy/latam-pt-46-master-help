@@ -100,8 +100,10 @@ a:hover {
 }
 
 .section-dark {
-  background-color: #181818;
-  color: #e0e0e0;
+  background-color: #121212; /* O el color que ya tengas */
+  color: #f8f9fa; /* Color de texto para secciones oscuras */
+  padding: 80px 0; /* Ajusta el padding general. Puedes aumentar este valor. */
+  margin-top: 50px; /* <--- Agrega un margen superior si quieres separarlo más de la sección anterior */
 }
 
 .highlight {

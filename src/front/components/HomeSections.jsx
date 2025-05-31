@@ -266,7 +266,7 @@ const HomeSections = () => {
             Deja de apagar fuegos y empieza a construir sistemas sólidos. Master
             Help te da el poder de trabajar de forma más inteligente.
           </p>
-          <a href="#" className="btn btn-light btn-lg px-5 py-3">
+          <a href="/signin" className="btn btn-light btn-lg px-5 py-3">
             🚀 Sí, Quiero mi Prueba Gratuita
           </a>
           <p className="mt-3">
