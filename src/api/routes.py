@@ -11,7 +11,7 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dti9epq5d",
     api_key="677486956793833",
-    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  # ← reemplaza esto por tu secreto real
+    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  
     secure=True
 )
 

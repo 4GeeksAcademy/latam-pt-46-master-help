@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg fixed-top custom-navbar">
       <div className="container-fluid px-3 px-md-5 d-flex flex-wrap justify-content-between align-items-center">
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" href="/home">
           <img src={logo} alt="Master Help Logo" height="40" />
         </a>
 
