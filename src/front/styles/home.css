@@ -237,11 +237,23 @@ a:hover {
   -webkit-backdrop-filter: blur(8px);
   transition: all 0.3s ease;
 }
+.custom-navbar-2 {
+background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
+  border-bottom: 1px solid #00bfff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+
 
 .custom-navbar .navbar-brand img {
   max-height: 50px;
 }
 
+.custom-navbar-2 .navbar-brand img {
+  max-height: 50px;
+}
 .custom-navbar .nav-link {
   color: #ffffff;
   font-weight: 600;

@@ -231,7 +231,7 @@ a:hover {
 
 /* === NAVBAR === */
 .custom-navbar {
-  background-color: #12121288;
+background: linear-gradient(to right, #000000, rgba(0, 191, 255, 0.1));
   border-bottom: 1px solid #00bfff;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);

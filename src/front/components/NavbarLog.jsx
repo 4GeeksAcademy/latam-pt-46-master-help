@@ -14,9 +14,9 @@ const Navbar = () => {
   };
   
   return (
-    <nav className="navbar navbar-expand-lg fixed-top custom-navbar custom-toggler">
+    <nav className="navbar navbar-expand-lg fixed-top custom-navbar-2 custom-toggler">
       <div className="container">
-        <a className="navbar-brand" href="/#hero">
+        <a className="navbar-brand" href="/">
           <img src={logo} alt="Master Help Logo" height="100" />
         </a>
 
@@ -37,7 +37,7 @@ const Navbar = () => {
 
           
           <Link
-            to="/dashboard"
+            to="/home"
             className="btn btn-info me-4"
             style={{
               padding: "6px 20px",
