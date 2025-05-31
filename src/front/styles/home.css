@@ -351,3 +351,67 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
 .step-content {
   color: #e0e0e0 !important; /* blanco suave */
 }
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1040;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+.modal-content {
+  background-color: #121212;
+  color: #ffffff;
+  border: 1px solid #00bfff;
+}
+
+.modal-header {
+  border-bottom: 1px solid #00bfff;
+}
+
+.btn-close {
+  filter: invert(1);
+}
+
+/* Fondo oscuro para el modal */
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenedor del modal */
+.custom-modal {
+  background-color: #121212;
+  padding: 1rem;
+  max-width: 90%;
+  width: 800px;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1060;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Botón de cierre */
+.custom-modal .btn-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+/* Responsive ratio */
+.custom-modal .ratio {
+  border-radius: 8px;
+  overflow: hidden;
+}

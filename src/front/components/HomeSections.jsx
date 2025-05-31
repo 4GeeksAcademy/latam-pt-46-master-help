@@ -1,8 +1,10 @@
-// src/components/HomeSections.jsx
+import { useState } from "react";
 import "../styles/home.css";
 import heroImage from "../assets/img/hero2.webp";
 
 const HomeSections = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       {/* HERO SECTION */}
@@ -36,14 +38,33 @@ const HomeSections = () => {
           >
             🚀 Regístrate ahora y pégale al Master Help.
           </a>
-          <a
-            href="#"
+          <button
             className="btn btn-outline-light btn-lg px-5 py-3 mb-3"
+            onClick={() => setShowModal(true)}
           >
             Ver Demo <i className="bi bi-play-circle ms-2"></i>
-          </a>
+          </button>
         </div>
       </section>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="custom-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="custom-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="btn-close btn-close-white ms-auto"
+              onClick={() => setShowModal(false)}
+            ></button>
+            <div className="ratio ratio-16x9">
+              <iframe
+                src="src/front/assets/img/mh.mp4"
+                title="Demo Video"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* PROBLEM SECTION */}
       <section id="problem" className="section-padding">
@@ -58,8 +79,7 @@ const HomeSections = () => {
                   <i className="bi bi-shuffle icon mb-3"></i>
                   <h3 className="card-title">Procesos "Sorpresa"</h3>
                   <p className="card-text">
-                    Inconsistencias y errores porque cada uno hace las cosas a
-                    su manera.
+                    Inconsistencias y errores porque cada uno hace las cosas a su manera.
                   </p>
                 </div>
               </div>
@@ -70,8 +90,7 @@ const HomeSections = () => {
                   <i className="bi bi-files-alt icon mb-3"></i>
                   <h3 className="card-title">Información Dispersa</h3>
                   <p className="card-text">
-                    Documentos y aprobaciones perdidos entre correos y
-                    carpetas.
+                    Documentos y aprobaciones perdidos entre correos y carpetas.
                   </p>
                 </div>
               </div>
@@ -82,8 +101,7 @@ const HomeSections = () => {
                   <i className="bi bi-person-video3 icon mb-3"></i>
                   <h3 className="card-title">Onboarding Interminable</h3>
                   <p className="card-text">
-                    Nuevos talentos tardan demasiado en aprender por falta de
-                    guías claras.
+                    Nuevos talentos tardan demasiado en aprender por falta de guías claras.
                   </p>
                 </div>
               </div>
@@ -91,8 +109,7 @@ const HomeSections = () => {
           </div>
         </div>
       </section>
-
-      {/* SOLUTION BENEFITS */}
+{/* SOLUTION BENEFITS */}
       <section id="solution-benefits" className="section-dark">
         <div className="container">
           <h2 className="text-center mb-5">
@@ -262,3 +279,5 @@ const HomeSections = () => {
 };
 
 export default HomeSections;
+
+
