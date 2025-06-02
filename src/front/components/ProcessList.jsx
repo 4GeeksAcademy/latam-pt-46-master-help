@@ -72,7 +72,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
                 <div className="btn-group">
                   <button
                     type="button"
-                    className="btn btn-outline-light btn-sm btn-glow"
+                    className="btn btn-outline-light btn-sm btn-glow d-flex align-items-center justify-content-center" // CLASES ACTUALIZADAS
                     onClick={(e) => handleInfoClick(process.id, e)}
                     title="Ver Información"
                   >
@@ -80,7 +80,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline-light btn-sm btn-glow"
+                    className="btn btn-outline-light btn-sm btn-glow d-flex align-items-center justify-content-center" // CLASES ACTUALIZADAS
                     onClick={(e) => handleDeleteClick(process.id, process.name, e)}
                     title="Eliminar Proceso"
                   >

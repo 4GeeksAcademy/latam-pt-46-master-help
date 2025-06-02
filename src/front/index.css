@@ -300,7 +300,7 @@ background: linear-gradient(to right, #000000, rgba(0, 191, 255, 0.1));
 
 .card .fs-5,
 .card .text-dark {
-  color: #121212 !important;
+  color: #00BFFF !important;
   font-weight: 600;
 }
 
