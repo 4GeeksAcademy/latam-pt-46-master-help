@@ -17,11 +17,11 @@ const AboutUsSection = () => {
                 <div className="card-body text-center d-flex flex-column align-items-center">
                   <div className="position-relative mb-3">
                     <img
-                      src="src/front/assets/jp.jpg" 
+                      src="src/front/assets/jp.jpg"
                       alt="Juan Pablo Aquino"
                       className="rounded-circle mb-3 avatar-team"
                     />
-                    <span className="flag-icon flag-icon-mx position-absolute bottom-0 end-0 me-2 mb-2"></span> 
+                    <span className="flag-icon flag-icon-mx position-absolute bottom-0 end-0 me-2 mb-2"></span>
                   </div>
                   <h3 className="card-title mb-1">Juan Pablo Aquino</h3>
                   <p className="text-muted small mb-3">Co-fundador & Estratega Digital</p>
@@ -42,7 +42,7 @@ const AboutUsSection = () => {
                 <div className="card-body text-center d-flex flex-column align-items-center">
                   <div className="position-relative mb-3">
                     <img
-                      src="https://picsum.photos/id/65/120/120" 
+                      src="src/front/assets/img/javierVarela.jpg"
                       alt="Javier Varela"
                       className="rounded-circle mb-3 avatar-team"
                     />
@@ -51,12 +51,12 @@ const AboutUsSection = () => {
                   <h3 className="card-title mb-1">Javier Varela</h3>
                   <p className="text-muted small mb-3">Co-fundador & Arquitecto de Software</p>
                   <div className="text-start w-100 flex-grow-1">
-                    <p><strong>Estudios:</strong> Ciencias de la Computación, Maestría en Arquitectura de Software.</p>
-                    <p><strong>Hobbies:</strong> Programación de videojuegos, ajedrez, lectura de ciencia ficción.</p>
-                    <p><strong>Experiencia Profesional:</strong> Más de 18 años diseñando y construyendo arquitecturas robustas para plataformas empresariales.</p>
+                    <p><strong>Estudios:</strong> Desarollo de Software Full-stack y Especialista en Redes.</p>
+                    <p><strong>Hobbies:</strong> Programación también forma parte de mis pasatiempos, así como lo son los videojuegos, tecnologías open source, café, etc.</p>
+                    <p><strong>Experiencia Profesional:</strong> Más de 4 años en el área de redes, diseñando y automatizando procesos de dispositivos. Logrando mejorar la eficiencia del personal técnico a través del desarrollo de scripts, webapps y APIs </p>
                     <p className="fst-italic text-secondary mt-2">"Construyendo el futuro, un algoritmo a la vez."</p>
                   </div>
-                  <a href="https://www.linkedin.com/in/javiervarela" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light mt-3 btn-sm">Conectar</a>
+                  <a href="https://www.linkedin.com/in/javier-varela-9a415b201/" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light mt-3 btn-sm">Conectar</a>
                 </div>
               </div>
             </div>
@@ -67,16 +67,16 @@ const AboutUsSection = () => {
                 <div className="card-body text-center d-flex flex-column align-items-center">
                   <div className="position-relative mb-3">
                     <img
-                      src="src/front/assets/img/IMG_8192.jpg" 
+                      src="src/front/assets/img/IMG_8192.jpg"
                       alt="Sergio Orjuela"
                       className="rounded-circle mb-3 avatar-team"
                     />
-                    <span className="flag-icon flag-icon-co position-absolute bottom-0 end-0 me-2 mb-2"></span> 
+                    <span className="flag-icon flag-icon-co position-absolute bottom-0 end-0 me-2 mb-2"></span>
                   </div>
                   <h3 className="card-title mb-1">Sergio Orjuela</h3>
                   <p className="text-muted small mb-3">Co-fundador & Experto en UX/UI</p>
                   <div className="text-start w-100 flex-grow-1">
-                    <p><strong>Estudios:</strong> Ingeniero Agroindustrial con formación complementaria en desarrollo web full-stack.</p>
+                    <p><strong>Estudios:</strong> Ingeniero Agroindustrial con formación complementaria en desarrollo web Full-stack.</p>
                     <p><strong>Hobbies:</strong> Me apasiona el montañismo, el futbol y experimentar con nuevas tecnologías en mis proyectos personales.</p>
                     <p><strong>Experiencia Profesional:</strong> Cuento con más de 6 años de experiencia en producción agrícola bajo invernadero. Actualmente me especializo en desarrollo de software y gestión de procesos digitales.</p>
                     <p className="fst-italic text-secondary mt-2">"Haciendo la tecnología tan humana como sea posible."</p>
