@@ -76,9 +76,9 @@ const AboutUsSection = () => {
                   <h3 className="card-title mb-1">Sergio Orjuela</h3>
                   <p className="text-muted small mb-3">Co-fundador & Experto en UX/UI</p>
                   <div className="text-start w-100 flex-grow-1">
-                    <p><strong>Estudios:</strong> Diseño Gráfico y Experiencia de Usuario, Certificación en Psicología Cognitiva.</p>
-                    <p><strong>Hobbies:</strong> Ilustración digital, ciclismo de montaña, cocinar.</p>
-                    <p><strong>Experiencia Profesional:</strong> Más de 12 años liderando el diseño de interfaces intuitivas y experiencias de usuario memorables para SaaS.</p>
+                    <p><strong>Estudios:</strong> Ingeniero Agroindustrial con formación complementaria en desarrollo web full-stack.</p>
+                    <p><strong>Hobbies:</strong> Me apasiona el montañismo, el futbol y experimentar con nuevas tecnologías en mis proyectos personales.</p>
+                    <p><strong>Experiencia Profesional:</strong> Cuento con más de 6 años de experiencia en producción agrícola bajo invernadero. Actualmente me especializo en desarrollo de software y gestión de procesos digitales.</p>
                     <p className="fst-italic text-secondary mt-2">"Haciendo la tecnología tan humana como sea posible."</p>
                   </div>
                   <a href="https://www.linkedin.com/in/sergioorjuela" target="_blank" rel="noopener noreferrer" className="btn btn-outline-light mt-3 btn-sm">Conectar</a>
