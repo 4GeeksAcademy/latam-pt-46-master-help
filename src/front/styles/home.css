@@ -1,5 +1,11 @@
-/* === TIPOGRAFÍA Y FUENTES === */
+/* src/styles/home.css (Asegúrate de agregar o verificar estas reglas) */
+
+/* === TIPOGRAFÍA Y FUENTES (ya las tienes, solo por referencia) === */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap");
+
+/* Importar la librería de banderas (puedes ponerla aquí o en tu index.html) */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css");
+
 
 html {
   scroll-behavior: smooth;
@@ -64,7 +70,7 @@ a:hover {
   color: #009acd;
 }
 
-/* === HERO === */
+/* === HERO (ya lo tienes, solo por referencia) === */
 .hero-section {
   padding: 7rem 0;
   background-color: #1a1a1a;
@@ -184,7 +190,7 @@ a:hover {
   transform: translateY(2px);
 }
 
-/* === CARDS === */
+/* === CARDS (ya los tienes, solo por referencia) === */
 .card,
 .card-dark {
   background-color: #1e1e1e;
@@ -197,7 +203,7 @@ a:hover {
 
 .card:hover,
 .card-dark:hover {
-  background-color: #eeeeee;
+  background-color: #eeeeee; /* Este hover es para el card general, quizás quieras que sea más sutil o quitarlo para los team cards */
 }
 
 .card .card-title,
@@ -217,7 +223,7 @@ a:hover {
   color: #00BFFF;
 }
 
-/* === SCROLLBARS === */
+/* === SCROLLBARS (ya los tienes, solo por referencia) === */
 .process-items-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -231,7 +237,7 @@ a:hover {
   background-color: transparent;
 }
 
-/* === NAVBAR === */
+/* === NAVBAR (ya los tienes, solo por referencia) === */
 .custom-navbar {
   background-color: #12121288;
   border-bottom: 1px solid #00bfff;
@@ -246,8 +252,6 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
   -webkit-backdrop-filter: blur(8px);
   transition: all 0.3s ease;
 }
-
-
 
 .custom-navbar .navbar-brand img {
   max-height: 50px;
@@ -270,7 +274,7 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%2300BFFF' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* === SEARCH BAR === */
+/* === SEARCH BAR (ya los tienes, solo por referencia) === */
 .search-container {
   position: relative;
   width: 100%;
@@ -294,7 +298,7 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
 }
 
 
-/* === PROCESOS === */
+/* === PROCESOS (ya los tienes, solo por referencia) === */
 .process-item {
   background-color: #ffffff !important;
   border: 1px solid #dddddd !important;
@@ -312,7 +316,7 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
   font-weight: 600;
 }
 
-/* === TESTIMONIOS === */
+/* === TESTIMONIOS (ya los tienes, solo por referencia) === */
 .avatar {
   width: 90px;
   height: 90px;
@@ -323,7 +327,7 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
   background-color: #252525;
 }
 
-/* === CTA FINAL === */
+/* === CTA FINAL (ya los tienes, solo por referencia) === */
 .final-cta-section {
   background-color: #00bfff;
   color: #121212;
@@ -417,4 +421,35 @@ background: linear-gradient(to left, #000000, rgba(0, 191, 255, 0.1));
 .custom-modal .ratio {
   border-radius: 8px;
   overflow: hidden;
+}
+
+/* === SECCIÓN NOSOTROS (TEAM) === */
+.team-member-card {
+  position: relative;
+  overflow: hidden; /* Para asegurar que la bandera no se salga */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #1e1e1e; /* El mismo fondo de tus cards existentes */
+  border: 1px solid #2a2a2a; /* El mismo borde */
+}
+
+.team-member-card:hover {
+  transform: translateY(-5px); /* Pequeño efecto hover para interacción */
+  box-shadow: 0 10px 20px rgba(0, 191, 255, 0.2); /* Sutil brillo azul */
+}
+
+.avatar-team {
+  width: 120px; /* Tamaño un poco más grande para las fotos del equipo */
+  height: 120px;
+  object-fit: cover;
+  border: 3px solid #00bfff; /* Borde azul de tu marca */
+}
+
+.flag-icon {
+  font-size: 1.8rem; /* Tamaño de la bandera */
+  line-height: 1; /* Asegurar que la bandera se vea bien */
+  border: 2px solid #fff; /* Borde blanco para que resalte */
+  border-radius: 50%; /* Hacer la bandera circular */
+  background-color: #fff; /* Fondo blanco para la bandera */
+  padding: 2px; /* Espacio alrededor de la bandera */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
 }
