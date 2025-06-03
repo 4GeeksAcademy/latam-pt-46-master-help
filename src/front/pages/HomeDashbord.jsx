@@ -165,8 +165,8 @@ export const HomeDashboard = () => {
 
                 <div className="d-flex justify-content-between align-items-center mb-4 mt-4">
                     <h3 className="m-0 text-secondary">Mis Categorías</h3>
-                    <button className="btn btn-success" onClick={handleOpenCreateCategoryModal}>
-                        <i className="bi bi-plus-lg me-1"></i> Crear Categoría
+                    <button className="btn btn-outline-light" onClick={handleOpenCreateCategoryModal}>
+                        <i className=" bi bi-plus-lg me-1"></i> Crear Categoría
                     </button>
                 </div>
 

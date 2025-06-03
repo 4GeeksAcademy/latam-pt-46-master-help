@@ -20,7 +20,8 @@ const CategoryItem = ({
                 aria-controls={`collapse-processes-${category.id}`}
             >
                 <div className="d-flex align-items-center">
-                    <span className="me-3 fs-5 fw-bold text-primary">
+                    {/* Aquí estaba el error: faltaba una llave de cierre después de '▶' */}
+                    <span className="me-3 fs-5 fw-bold text-primary align-self-center">
                         {isExpanded ? '▼' : '▶'}
                     </span>
                     <strong className="fs-5">{category.name}</strong>

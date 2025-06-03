@@ -6,7 +6,6 @@ import enum
 
 db = SQLAlchemy()
 
-
 # Enum para tipos de paso
 class StepType(enum.Enum):
     TEXT = "TEXT"

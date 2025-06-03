@@ -21,13 +21,14 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
       {/* Páginas base */}
       <Route path="/" element={<Home />} />
+      <Route path="/single/:theId" element={<Single />} />
+      <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signin" element={<LoginForm />} />
-      <Route path="/home" element={<HomeDashbord />} />
-
 
       {/* Funcionalidad de procesos */}
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/home" element={<HomeDashbord />} />
       <Route path="/process/:id" element={<ProcessDetail />} />
       <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
       <Route path="/editar-proceso/:id" element={<EditarProceso />} />

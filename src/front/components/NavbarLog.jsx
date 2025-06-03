@@ -115,10 +115,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top custom-navbar custom-toggler">
-      <div className="container">
-        <a className="navbar-brand" href="/#hero">
-          <img src={logo} alt="Master Help Logo" height="100" />
+    <nav className="navbar navbar-expand-lg fixed-top custom-navbar">
+      <div className="container-fluid px-3 px-md-5 d-flex flex-wrap justify-content-between align-items-center">
+        <a className="navbar-brand" href="/home">
+          <img src={logo} alt="Master Help Logo" height="40" />
         </a>
 
         <div className="d-flex align-items-center ms-auto">
@@ -191,13 +191,9 @@ const Navbar = () => {
           </div>
 
           <Link
-            to="/dashboard"
-            className="btn btn-info me-4"
-            style={{
-              padding: "6px 20px",
-              fontSize: "14px",
-              whiteSpace: "nowrap",
-            }}
+            to="/home"
+            className="btn btn-primary"
+            style={{ padding: "6px 20px", fontSize: "14px", whiteSpace: "nowrap" }}
           >
             Mis Procesos
           </Link>

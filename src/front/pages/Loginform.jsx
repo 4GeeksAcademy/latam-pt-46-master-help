@@ -33,7 +33,7 @@ export const LoginForm = () => {
   const isLogin = location.pathname == "/login";
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
     const response = await login(email, password, isLogin);
     if (response == false) {

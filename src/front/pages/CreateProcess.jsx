@@ -11,7 +11,6 @@ const CreateProcess = () => {
   const navigate = useNavigate();
   const { category_id } = useParams();
 
-  // 🔄 Cargar nombre de categoría al montar
   useEffect(() => {
     const fetchCategory = async () => {
       const token = localStorage.getItem("token");
@@ -54,7 +53,6 @@ const CreateProcess = () => {
     }
 
     try {
-      // ✅ Cambiar URL para incluir category_id
       const res = await fetch(`${BACKEND_URL}/process/create/${category_id}`, {
         method: "POST",
         headers: {
@@ -73,7 +71,6 @@ const CreateProcess = () => {
       const data = await res.json();
       const processId = data.id;
 
-      // 🚀 Subir pasos uno por uno
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
         const formData = new FormData();
