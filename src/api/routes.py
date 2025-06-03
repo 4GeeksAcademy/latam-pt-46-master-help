@@ -258,15 +258,14 @@ def upload_step():
 
 # ------------------------- Autocomplete -------------------------
 
-@api.route('/autocomplete', methods=['POST'])
+@api.route('/autocomplete', methods=['GET'])
 @jwt_required()
 def handle_autocomplete():
     user_id = int(get_jwt_identity())
-    data = request.get_json()
-    if not data or not data.get("text"):
+    text = request.args.get("query", "")
+    if not text:
         return jsonify({"error": "Falta el texto para autocompletar"}), 400
 
-    text = data["text"]
     processes = Process.query.filter(
         Process.user_id == user_id,
         Process.name.ilike(f"%{text}%")
