@@ -153,6 +153,7 @@ def create_process(category_id):
 
     new_process = Process(
         name=data["name"],
+        description=data.get("description"),
         category_id=category.id,
         user_id=user_id
     )

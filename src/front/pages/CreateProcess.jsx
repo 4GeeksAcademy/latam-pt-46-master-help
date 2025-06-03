@@ -8,6 +8,8 @@ const CreateProcess = () => {
   const [categoryName, setCategoryName] = useState("");
   const [steps, setSteps] = useState([]);
   const [message, setMessage] = useState("");
+  const [processDescription, setProcessDescription] = useState("");
+  const [processName, setProcessName] = useState("");
   const navigate = useNavigate();
   const { category_id } = useParams();
 
@@ -47,7 +49,7 @@ const CreateProcess = () => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
-    if (!name.trim()) {
+    if (!processName.trim()) {
       alert("El nombre del proceso es obligatorio.");
       return;
     }
@@ -59,7 +61,7 @@ const CreateProcess = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: name.trim() }),
+        body: JSON.stringify({ name: processName.trim(), description: processDescription }),
       });
 
       if (!res.ok) {
@@ -129,9 +131,19 @@ const CreateProcess = () => {
           <label>Nombre del proceso</label>
           <input
             className="form-control"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={processName}
+            onChange={(e) => setProcessName(e.target.value)}
             required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label>Descripción del proceso (opcional)</label>
+          <textarea
+            className="form-control"
+            value={processDescription}
+            onChange={(e) => setProcessDescription(e.target.value)}
+            placeholder="Describe una breve descripción del proceso"
           />
         </div>
 

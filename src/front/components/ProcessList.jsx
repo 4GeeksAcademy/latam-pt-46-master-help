@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Info, Pencil, Trash2 } from 'lucide-react';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -7,7 +8,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
   const navigate = useNavigate();
 
   const handleDeleteClick = async (processId, processName, e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent event bubbling
     const confirmed = window.confirm(`¿Deseas eliminar el proceso: ${processName}?`);
     if (!confirmed) return;
 
@@ -36,6 +37,11 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     navigate(`/process/${processId}`);
   };
 
+  const handleEditClick = (processId, e) => {
+    e.stopPropagation();
+    navigate(`/editar-proceso/${processId}`);
+  };
+
   let content;
 
   if (isLoading) {
@@ -61,30 +67,42 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     content = (
       <div className="row g-4">
         {processes.map((process) => (
-          <div key={process.id} className="col-md-6">
-            <div
-              className="card card-dark h-100 process-item"
-              onClick={() => handleInfoClick(process.id)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="card-body d-flex justify-content-between align-items-center">
-                <span className="fs-5 text-white">{process.name}</span>
-                <div className="btn-group">
+          <div key={process.id} className="col-auto">
+            <div className="card" style={{ width: "18rem" }}>
+              <div className="card-header">
+                <h5 className="card-title mb-0">{process.name}</h5>
+              </div>
+              <div className="card-body d-flex flex-column">
+                <p className="card-text text-muted small flex-grow-1">
+                  {process.description ? process.description : "Sin descripción."}
+                </p>
+                <div className="d-flex gap-2 justify-content-end">  
                   <button
                     type="button"
-                    className="btn btn-outline-light btn-sm btn-glow d-flex align-items-center justify-content-center" // CLASES ACTUALIZADAS
+                    className="btn btn-outline-info btn-sm d-flex justify-content-center align-items-center"
+                    style={{ width: "32px", height: "32px", padding: "0" }}
                     onClick={(e) => handleInfoClick(process.id, e)}
                     title="Ver Información"
                   >
-                    <i className="bi bi-info-circle"></i>
+                    <Info size={16} />
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline-light btn-sm btn-glow d-flex align-items-center justify-content-center" // CLASES ACTUALIZADAS
+                    className="btn btn-outline-primary btn-sm d-flex justify-content-center align-items-center"
+                    style={{ width: "32px", height: "32px", padding: "0" }}
+                    onClick={(e) => handleEditClick(process.id, e)}
+                    title="Editar Proceso"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger btn-sm d-flex justify-content-center align-items-center"
+                    style={{ width: "32px", height: "32px", padding: "0" }}
                     onClick={(e) => handleDeleteClick(process.id, process.name, e)}
                     title="Eliminar Proceso"
                   >
-                    <i className="bi bi-trash"></i>
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>

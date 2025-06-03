@@ -7,6 +7,8 @@ import enum
 db = SQLAlchemy()
 
 # Enum para tipos de paso
+
+
 class StepType(enum.Enum):
     TEXT = "TEXT"
     IMAGE = "IMAGE"
@@ -40,10 +42,12 @@ class User(db.Model):
 
 
 class Process(db.Model):
-    __tablename__ = "process" 
+    __tablename__ = "process"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("categories.id"), nullable=True)
     category = relationship("Category", back_populates="processes")
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow)
@@ -55,12 +59,13 @@ class Process(db.Model):
 
     def serialize(self):
         return {
-        "id": self.id,
-        "name": self.name,
-        "category": self.category.serialize() if self.category else None,
-        "created_at": self.created_at.isoformat(),
-        "user_id": self.user_id
-    }
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "category": self.category.serialize() if self.category else None,
+            "created_at": self.created_at.isoformat(),
+            "user_id": self.user_id
+        }
 
 
 # Modelo de Paso del Proceso
@@ -87,6 +92,7 @@ class Step(db.Model):
 
 # Modelo de Categoría
 
+
 class Category(db.Model):
     __tablename__ = "categories"
 
@@ -96,7 +102,8 @@ class Category(db.Model):
 
     user: Mapped["User"] = relationship("User", back_populates="categories")
 
-    processes: Mapped[list["Process"]] = relationship("Process", back_populates="category", cascade="all, delete")
+    processes: Mapped[list["Process"]] = relationship(
+        "Process", back_populates="category", cascade="all, delete")
 
     def serialize(self):
         return {
