@@ -18,9 +18,13 @@ const login = async (email, password, isLogin) => {
     data = JSON.parse(text);
   }
   if (response.ok) {
-    return data;
+    if (response.status === 409) {
+      return [false, "signin", 409];
+    }
+    return [data, path, 200];
   } else {
-    return false;
+    // Try to get backend error code/message
+    return [false, path, response.status];
   }
 }
 
@@ -33,16 +37,36 @@ export const LoginForm = () => {
   const isLogin = location.pathname == "/login";
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-    const response = await login(email, password, isLogin);
-    if (response == false) {
-      setMessage("Credenciales Incorrectas");
-    } else if (isLogin) {
-      localStorage.setItem("token", response.access_token); // ✅ CORREGIDO
+    // Client-side password length check for registration
+    if (!isLogin && password.length < 6) {
+      setMessage("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
+    const [response, path, type] = await login(email, password, isLogin);
+
+    if (response === false) {
+      if (type === 409) {
+        setMessage("El correo ya está registrado.");
+      } else if (type === 400 && path === "signin") {
+        setMessage("La contraseña debe tener al menos 6 caracteres.");
+      } else if (path === "signin") {
+        setMessage("Error al crear la cuenta. Inténtalo de nuevo.");
+      } else if (path === "login") {
+        setMessage("Credenciales Incorrectas");
+      }
+      return;
+    }
+
+    // Success
+    if (isLogin) {
+      localStorage.setItem("token", response.access_token);
       setMessage("Inicio de sesión exitoso.");
       navigate("/home");
     } else {
+      setMessage("Cuenta creada exitosamente. Ahora puedes iniciar sesión.");
       navigate("/login");
     }
   };
