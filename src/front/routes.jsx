@@ -1,34 +1,47 @@
-// Import necessary components and functions from react-router-dom.
-
 import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
 } from "react-router-dom";
+
+// Importaciones de tus layouts y páginas existentes
 import { Layout } from "./pages/Layout";
-import  Home  from "./pages/Home";
+import Home from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { LoginForm } from "./pages/Loginform";
 
+// Importaciones de tus páginas de dashboard y procesos
+import Dashboard from "../front/pages/Dashboard";
+import ProcessDetail from "../front/pages/ProcessDetail";
+import CreateProcess from "../front/pages/CreateProcess";
+import EditarProceso from "../front/pages/EditarProceso";
+import HomeDashbord from "./pages/HomeDashbord";
+
+// ¡IMPORTA TU COMPONENTE ABOUTUSSECTION AQUÍ!
+import AboutUsSection from "../front/pages/AboutUs"; // Ajusta esta ruta según donde hayas guardado el archivo
+
 export const router = createBrowserRouter(
-    createRoutesFromElements(
-    // CreateRoutesFromElements function allows you to build route elements declaratively.
-    // Create your routes here, if you want to keep the Navbar and Footer in all views, add your new routes inside the containing Route.
-    // Root, on the contrary, create a sister Route, if you have doubts, try it!
-    // Note: keep in mind that errorElement will be the default page when you don't get a route, customize that page to make your project more attractive.
-    // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
+      {/* Páginas base */}
+      <Route index element={<Home />} /> {/* Usar 'index' para la ruta raíz si Layout también tiene path="/" */}
+      <Route path="/single/:theId" element={<Single />} />
+      <Route path="/demo" element={<Demo />} />
+      <Route path="/login" element={<LoginForm />} />
+      <Route path="/signin" element={<LoginForm />} />
 
-      // Root Route: All navigation will start from here.
-      <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
+      {/* ¡NUEVA RUTA PARA NOSOTROS! */}
+      <Route path="/about-us" element={<AboutUsSection />} />
+      {/* O si tu Navbar usa /about-us: */}
+      {/* <Route path="/about-us" element={<AboutUsSection />} /> */}
 
-        {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-        <Route path= "/" element={<Home />} />
-        <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
-        <Route path="/demo" element={<Demo />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signin" element={<LoginForm />} />
-
-      </Route>
-    )
+      {/* Funcionalidad de procesos */}
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/home" element={<HomeDashbord />} /> {/* Si esta es la home del dashboard, podría ir anidada bajo /dashboard */}
+      <Route path="/process/:id" element={<ProcessDetail />} />
+      <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
+      <Route path="/editar-proceso/:id" element={<EditarProceso />} />
+    </Route>
+  )
 );
