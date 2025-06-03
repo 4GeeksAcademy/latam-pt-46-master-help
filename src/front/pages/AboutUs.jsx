@@ -67,7 +67,7 @@ const AboutUsSection = () => {
                 <div className="card-body text-center d-flex flex-column align-items-center">
                   <div className="position-relative mb-3">
                     <img
-                      src="https://picsum.photos/id/66/120/120" 
+                      src="src/front/assets/img/IMG_8192.jpg" 
                       alt="Sergio Orjuela"
                       className="rounded-circle mb-3 avatar-team"
                     />
