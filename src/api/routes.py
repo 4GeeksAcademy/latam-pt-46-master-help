@@ -6,12 +6,13 @@ from api.models import db, User, Process, Step, StepType, Category
 import cloudinary.uploader
 import cloudinary
 from cloudinary.utils import cloudinary_url
+from os import getenv
 
 # Configuración de Cloudinary
 cloudinary.config(
-    cloud_name="dti9epq5d",
-    api_key="677486956793833",
-    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",
+    cloud_name=getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=getenv("CLOUDINARY_API_KEY"),
+    api_secret=getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
 
