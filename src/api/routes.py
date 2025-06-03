@@ -11,16 +11,13 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dti9epq5d",
     api_key="677486956793833",
-    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",  
+    api_secret="bkhKWcM1fZEQlzYQeMr2J8Iuu0c",
     secure=True
 )
 
-# Crear blueprint y aplicar CORS explícitamente
 api = Blueprint('api', __name__)
-
 # ------------------------- AUTH -------------------------
 
-# ------------------------- AUTH -------------------------
 
 @api.route('/user/signin', methods=['POST'])
 def handle_register_new_user():

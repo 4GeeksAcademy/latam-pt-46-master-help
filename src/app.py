@@ -12,38 +12,25 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
+static_file_dir = os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), '../public/')
 
 app = Flask(__name__)
 
-# ✅ CORS configurado de forma explícita
+# Allow any origin for CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
 # ✅ JWT secret
 app.config["JWT_SECRET_KEY"] = "M4st3rH4lp"
 jwt = JWTManager(app)
 
-# ✅ Configuración de CORS global
-CORS(app, resources={r"/api/*": {"origins": ["https://symmetrical-space-giggle-pgg5gxgg6rw36769-3000.app.github.dev"]}},
-     supports_credentials=True,
-     expose_headers="Authorization",
-     allow_headers=["Content-Type", "Authorization"])
-
-# ✅ CORS headers adicionales después de cada respuesta
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://symmetrical-space-giggle-pgg5gxgg6rw36769-3000.app.github.dev"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
-
 app.url_map.strict_slashes = False
 
 # ✅ Configuración de base de datos
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
+        "postgres://", "postgresql://")
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
@@ -60,11 +47,15 @@ setup_commands(app)
 app.register_blueprint(api, url_prefix='/api')
 
 # ✅ Manejo de errores personalizados
+
+
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 # ✅ Sitemap para entorno de desarrollo
+
+
 @app.route('/')
 def sitemap():
     if ENV == "development":
@@ -72,6 +63,8 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 # ✅ Servir archivos estáticos
+
+
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
     if not os.path.isfile(os.path.join(static_file_dir, path)):
@@ -79,6 +72,7 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0
     return response
+
 
 # ✅ Iniciar el servidor
 if __name__ == '__main__':
