@@ -31,6 +31,7 @@ const login = async (email, password, isLogin) => {
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +43,11 @@ export const LoginForm = () => {
     // Client-side password length check for registration
     if (!isLogin && password.length < 6) {
       setMessage("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      setMessage("Las contraseñas no coinciden.");
       return;
     }
 
@@ -71,7 +77,6 @@ export const LoginForm = () => {
     }
   };
 
-
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="card shadow p-4" style={{ width: "100%", maxWidth: "400px", borderRadius: "1rem" }}>
@@ -99,11 +104,28 @@ export const LoginForm = () => {
               required
             />
           </div>
+          {/* Only show confirm password on registration */}
+          {!isLogin && (
+            <div className="form-group mb-4">
+              <label className="form-label">Confirmar Contraseña</label>
+              <input
+                type="password"
+                className="form-control form-control-lg"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="********"
+                required
+              />
+            </div>
+          )}
           <button type="submit" className="btn btn-outline-light w-100 btn-lg">
             {isLogin ? "Ingresar" : "Crear Cuenta"}
           </button>
           {message && (
-            <div className="alert alert-info mt-3 text-center" role="alert">
+            <div
+              className={`alert mt-3 text-center ${message.includes("exitoso") || message.includes("exitosamente") ? "alert-info" : "alert-danger"}`}
+              role="alert"
+            >
               {message}
             </div>
           )}
