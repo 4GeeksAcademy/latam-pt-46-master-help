@@ -6,7 +6,7 @@ import "/workspaces/latam-pt-46-master-help/src/front/index.css";
 
 
 const Navbar = () => {
-  
+
   return (
     <nav className="navbar navbar-expand-lg fixed-top custom-navbar custom-toggler">
       <div className="container">
@@ -23,7 +23,12 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-
+            <NavHashLink
+              to="/about-us" className="nav-item nav-link">
+              <a className="nav-link" href="/about-us">
+                Nosotros
+              </a>
+            </NavHashLink>
             <NavHashLink
               to="/#solution-benefits" className="nav-item nav-link">
               <a className="nav-link" href="/#solution-benefits">
@@ -58,7 +63,7 @@ const Navbar = () => {
           <div className="d-flex ms-lg-3">
             <Link to="/login" className="btn btn-outline-light me-2">
               Iniciar Sesión
-            </Link>           
+            </Link>
             <Link to="/signin" className="btn btn-primary">
               Registrate
             </Link>
