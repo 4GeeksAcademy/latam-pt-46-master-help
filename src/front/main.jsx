@@ -8,6 +8,7 @@ import { BackendURL } from './components/BackendURL';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './styles/home.css';
+import 'intro.js/introjs.css';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -24,9 +25,7 @@ const Main = () => {
     );
     return (
         <React.StrictMode>
-            {/* Provide global state to all components */}
             <StoreProvider>
-                {/* Set up routing for the application */}
                 <RouterProvider router={router}>
                 </RouterProvider>
             </StoreProvider>
@@ -34,5 +33,4 @@ const Main = () => {
     );
 }
 
-// Render the Main component into the root DOM element.
 ReactDOM.createRoot(document.getElementById('root')).render(<Main />)

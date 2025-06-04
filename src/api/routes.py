@@ -255,6 +255,48 @@ def upload_step():
     return jsonify(step.serialize()), 201
 
 
+@api.route('/step/<int:step_id>', methods=['PUT'])
+@jwt_required()
+def update_step(step_id):
+    user_id = int(get_jwt_identity())
+    step = Step.query.get(step_id)
+    if not step:
+        return jsonify({"error": "Paso no encontrado"}), 404
+    if step.process.user_id != user_id:
+        return jsonify({"error": "No autorizado"}), 403
+
+    # Check if request is multipart (file upload) or JSON (text/url)
+    if request.content_type and request.content_type.startswith("multipart/form-data"):
+        label = request.form.get("label", step.label)
+        step_type = request.form.get("type", step.type.name)
+        order = request.form.get("order", step.order)
+        # If a file is provided, upload and update content
+        if step_type in ["IMAGE", "PDF", "VIDEO"] and "file" in request.files:
+            upload_result = cloudinary.uploader.upload(
+                request.files["file"],
+                resource_type="auto"
+            )
+            step.content = upload_result.get("secure_url")
+        elif "content" in request.form:
+            step.content = request.form.get("content")
+        step.label = label
+        step.type = StepType[step_type]
+        step.order = int(order)
+    else:
+        data = request.get_json()
+        if "label" in data:
+            step.label = data["label"]
+        if "type" in data:
+            step.type = StepType[data["type"]]
+        if "content" in data:
+            step.content = data["content"]
+        if "order" in data:
+            step.order = int(data["order"])
+
+    db.session.commit()
+    return jsonify(step.serialize()), 200
+
+
 # ------------------------- Autocomplete -------------------------
 
 @api.route('/autocomplete', methods=['GET'])
