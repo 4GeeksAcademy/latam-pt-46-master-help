@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Pencil } from "lucide-react";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -65,6 +66,10 @@ const ProcessDetail = () => {
   const [process, setProcess] = useState(null);
   const [steps, setSteps] = useState([]);
   const [error, setError] = useState("");
+  const [editingStep, setEditingStep] = useState(null);
+  const [editLabel, setEditLabel] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [editFile, setEditFile] = useState(null);
 
   const fetchProcessDetail = async () => {
     const token = localStorage.getItem("token");
@@ -101,6 +106,59 @@ const ProcessDetail = () => {
     if (id) fetchProcessDetail();
   }, [id]);
 
+  const handleEditStepClick = (step) => {
+    setEditingStep(step);
+    setEditLabel(step.label);
+    setEditContent(step.content);
+    setEditFile(null);
+  };
+
+  const handleEditStepSave = async () => {
+    const token = localStorage.getItem("token");
+    const isMedia = ["IMAGE", "PDF", "VIDEO"].includes(editingStep.type);
+
+    if (isMedia && editFile) {
+      // Send as multipart/form-data
+      const formData = new FormData();
+      formData.append("label", editLabel);
+      formData.append("type", editingStep.type);
+      formData.append("order", editingStep.order);
+      formData.append("file", editFile);
+
+      const res = await fetch(`${BACKEND_URL}/step/${editingStep.id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (res.ok) {
+        fetchProcessDetail();
+        setEditingStep(null);
+      } else {
+        alert("No se pudo actualizar el paso.");
+      }
+    } else {
+      // Send as JSON
+      const res = await fetch(`${BACKEND_URL}/step/${editingStep.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          label: editLabel,
+          content: editContent,
+          // add type/order if you want to allow editing them
+        }),
+      });
+      if (res.ok) {
+        fetchProcessDetail();
+        setEditingStep(null);
+      } else {
+        alert("No se pudo actualizar el paso.");
+      }
+    }
+  };
+
   if (error) {
     return <div className="alert alert-danger mt-5 text-center">{error}</div>;
   }
@@ -132,16 +190,95 @@ const ProcessDetail = () => {
             <div key={idx} className={isMedia ? "col-md-6 mb-4" : "col-12 mb-4"}>
               <div className="card card-dark h-100 shadow-sm border-0">
                 <div className="card-body">
-                  <h5 className="card-title text-primary">
-                    Paso {idx + 1}: {step.label}
-                  </h5>
-                  <StepContent step={step} />
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <h5 className="card-title text-primary mb-0">
+                      Paso {idx + 1}: {step.label}
+                    </h5>
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => handleEditStepClick(step)}
+                      title="Editar Paso"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                  </div>
+                  {editingStep?.id === step.id ? (
+                    <div>
+                      <input
+                        type="text"
+                        className="form-control mb-2"
+                        value={editLabel}
+                        onChange={(e) => setEditLabel(e.target.value)}
+                      />
+                      <textarea
+                        className="form-control mb-2"
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                      />
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={handleEditStepSave}
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        className="btn btn-secondary btn-sm ms-2"
+                        onClick={() => setEditingStep(null)}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    <StepContent step={step} />
+                  )}
                 </div>
               </div>
             </div>
           );
         })}
       </div>
+
+      {editingStep && (
+        <div className="modal show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Editar Paso</h5>
+                <button type="button" className="btn-close" onClick={() => setEditingStep(null)} />
+              </div>
+              <div className="modal-body">
+                <label>Nombre del paso</label>
+                <input
+                  className="form-control mb-2"
+                  value={editLabel}
+                  onChange={e => setEditLabel(e.target.value)}
+                />
+                <label>Contenido</label>
+                <textarea
+                  className="form-control"
+                  value={editContent}
+                  onChange={e => setEditContent(e.target.value)}
+                />
+                {["IMAGE", "PDF", "VIDEO"].includes(editingStep?.type) && (
+                  <div className="mb-2">
+                    <label>Archivo nuevo (opcional)</label>
+                    <input
+                      className="form-control"
+                      type="file"
+                      onChange={e => setEditFile(e.target.files[0])}
+                    />
+                    <small className="text-muted">Si seleccionas un archivo, reemplazará el actual.</small>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setEditingStep(null)}>Cancelar</button>
+                <button className="btn btn-primary" onClick={handleEditStepSave}>Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

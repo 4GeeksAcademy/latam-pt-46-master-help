@@ -15,7 +15,6 @@ import { LoginForm } from "./pages/Loginform";
 import Dashboard from "../front/pages/Dashboard";
 import ProcessDetail from "../front/pages/ProcessDetail";
 import CreateProcess from "../front/pages/CreateProcess";
-import EditarProceso from "../front/pages/EditarProceso";
 import HomeDashbord from "./pages/HomeDashbord";
 
 // ¡IMPORTA TU COMPONENTE ABOUTUSSECTION AQUÍ!
@@ -41,7 +40,6 @@ export const router = createBrowserRouter(
       <Route path="/home" element={<HomeDashbord />} /> {/* Si esta es la home del dashboard, podría ir anidada bajo /dashboard */}
       <Route path="/process/:id" element={<ProcessDetail />} />
       <Route path="/crear-proceso/:category_id" element={<CreateProcess />} />
-      <Route path="/editar-proceso/:id" element={<EditarProceso />} />
     </Route>
   )
 );

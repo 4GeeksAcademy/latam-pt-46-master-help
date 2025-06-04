@@ -37,11 +37,6 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     navigate(`/process/${processId}`);
   };
 
-  const handleEditClick = (processId, e) => {
-    e.stopPropagation();
-    navigate(`/editar-proceso/${processId}`);
-  };
-
   let content;
 
   if (isLoading) {
@@ -76,7 +71,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
                 <p className="card-text text-muted small flex-grow-1">
                   {process.description ? process.description : "Sin descripción."}
                 </p>
-                <div className="d-flex gap-2 justify-content-end">  
+                <div className="d-flex gap-2 justify-content-end">
                   <button
                     type="button"
                     className="btn btn-outline-info btn-sm d-flex justify-content-center align-items-center"
@@ -85,15 +80,6 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
                     title="Ver Información"
                   >
                     <Info size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary btn-sm d-flex justify-content-center align-items-center"
-                    style={{ width: "32px", height: "32px", padding: "0" }}
-                    onClick={(e) => handleEditClick(process.id, e)}
-                    title="Editar Proceso"
-                  >
-                    <Pencil size={16} />
                   </button>
                   <button
                     type="button"

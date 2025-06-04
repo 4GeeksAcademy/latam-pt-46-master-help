@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import GenericCreateModal from "../components/ModalCreateElement";
 import CategoryList from "../components/CategoryList";
+import introJs from 'intro.js';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -147,6 +148,53 @@ export const HomeDashboard = () => {
     const handleDeleteCategory = useCallback(baseHandleDeleteCategory, [currentToken, handleAuthError, BACKEND_URL]);
 
 
+    // --- TOUR LOGIC WITH UNIQUE SELECTORS ---
+    const startTour = () => {
+        introJs()
+            .setOptions({
+                steps: [
+                    {
+                        element: '.navbar',
+                        intro: 'Esta es la barra de navegación, desde aquí puedes acceder a otras secciones.',
+                        position: 'bottom'
+                    },
+                    {
+                        element: '.container.mt-5.py-4',
+                        intro: 'Aquí puedes ver y gestionar tus categorías.',
+                        position: 'top'
+                    },
+                    {
+                        element: '#tour-create-category',
+                        intro: 'Desde aquí puedes crear una nueva categoría.',
+                        position: 'left'
+                    },
+                    {
+                        element: '.alert.alert-info',
+                        intro: 'Aquí verás un mensaje si no tienes categorías creadas.',
+                        position: 'top'
+                    },
+                    {
+                        element: '.tour-category-card',
+                        intro: 'Cada tarjeta representa una categoría. Puedes expandirla para ver los procesos dentro de ella.',
+                        position: 'top'
+                    },
+                    {
+                        element: '#tour-add-process',
+                        intro: 'Puedes crear un nuevo proceso dentro de tu Categoria!.',
+                        position: 'left'
+                    },
+                ],
+                tooltipClass: 'customTooltip',
+                overlayOpacity: 0.8,
+                showBullets: false,
+                showProgress: true,
+                exitOnOverlayClick: false,
+                exitOnEsc: true,
+                scrollToElement: true,
+            })
+            .start();
+    };
+
     if (isLoadingCategories && categories.length === 0) {
         return (
             <div className="container mt-5 text-center">
@@ -165,9 +213,18 @@ export const HomeDashboard = () => {
 
                 <div className="d-flex justify-content-between align-items-center mb-4 mt-4">
                     <h3 className="m-0 text-secondary">Mis Categorías</h3>
-                    <button className="btn btn-outline-light" onClick={handleOpenCreateCategoryModal}>
-                        <i className=" bi bi-plus-lg me-1"></i> Crear Categoría
-                    </button>
+                    <div>
+                        <button
+                            id="tour-create-category"
+                            className="btn btn-outline-light"
+                            onClick={handleOpenCreateCategoryModal}
+                        >
+                            <i className="bi bi-plus-lg me-1"></i> Crear Categoría
+                        </button>
+                        <button className="btn btn-outline-primary ms-2" onClick={startTour}>
+                            Guía interactiva
+                        </button>
+                    </div>
                 </div>
 
                 {!isLoadingCategories && categories.length === 0 ? (
