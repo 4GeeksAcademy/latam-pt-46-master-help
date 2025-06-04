@@ -37,6 +37,7 @@ const ProcessList = ({ categoryId, processes, isLoading, error, fetched }) => {
     navigate(`/process/${processId}`);
   };
 
+
   let content;
 
   if (isLoading) {

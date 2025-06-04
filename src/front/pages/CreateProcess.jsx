@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ModalMessage from "../components/ModalMessage";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,6 +11,10 @@ const CreateProcess = () => {
   const [message, setMessage] = useState("");
   const [processDescription, setProcessDescription] = useState("");
   const [processName, setProcessName] = useState("");
+  const [modal, setModal] = useState({ show: false, message: "", onConfirm: null, onCancel: null });
+  const [infoModal, setInfoModal] = useState({ show: false, message: "", onClose: null });
+  const [pendingRemoveIndex, setPendingRemoveIndex] = useState(null);
+
   const navigate = useNavigate();
   const { category_id } = useParams();
 
@@ -39,6 +44,25 @@ const CreateProcess = () => {
     setSteps([...steps, { label: "", type: "TEXT", content: "", file: null }]);
   };
 
+  const handleRemoveStep = (index) => {
+    setPendingRemoveIndex(index);
+    setModal({
+      show: true,
+      title: "Eliminar Paso",
+      message: "¿Seguro que deseas eliminar este paso?",
+      onConfirm: () => confirmRemoveStep(index),
+      onCancel: () => setModal((prev) => ({ ...prev, show: false })),
+      confirmText: "Eliminar",
+      cancelText: "Cancelar"
+    });
+  };
+
+  const confirmRemoveStep = (index) => {
+    setSteps(steps.filter((_, i) => i !== index));
+    setModal((prev) => ({ ...prev, show: false }));
+    setPendingRemoveIndex(null);
+  };
+
   const handleChangeStep = (i, field, value) => {
     const updated = [...steps];
     updated[i][field] = value;
@@ -50,7 +74,12 @@ const CreateProcess = () => {
     const token = localStorage.getItem("token");
 
     if (!processName.trim()) {
-      alert("El nombre del proceso es obligatorio.");
+      setInfoModal({
+        show: true,
+        title: "Error",
+        message: "El nombre del proceso es obligatorio.",
+        onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+      });
       return;
     }
 
@@ -66,8 +95,14 @@ const CreateProcess = () => {
 
       if (!res.ok) {
         const errorText = await res.text();
+        setInfoModal({
+          show: true,
+          title: "Error",
+          message: "No se pudo crear el proceso.",
+          onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+        });
         console.error("Error al crear proceso:", errorText);
-        return alert("No se pudo crear el proceso.");
+        return;
       }
 
       const data = await res.json();
@@ -96,22 +131,57 @@ const CreateProcess = () => {
         });
 
         if (!uploadRes.ok) {
+          setInfoModal({
+            show: true,
+            title: "Error",
+            message: "No se pudo subir uno de los pasos.",
+            onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+          });
           console.error("Error al subir paso:", await uploadRes.text());
-          return alert("No se pudo subir uno de los pasos.");
+          return;
         }
       }
 
       setMessage("Proceso creado exitosamente.");
       setName("");
       setSteps([]);
+      setInfoModal({
+        show: true,
+        title: "Éxito",
+        message: "Proceso creado exitosamente.",
+        onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+      });
     } catch (err) {
+      setInfoModal({
+        show: true,
+        title: "Error",
+        message: "Ocurrió un error inesperado.",
+        onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+      });
       console.error("Error general:", err);
-      alert("Ocurrió un error inesperado.");
     }
   };
 
   return (
     <div className="container mt-5">
+      <ModalMessage
+        show={modal.show}
+        title={modal.title}
+        message={modal.message}
+        onConfirm={modal.onConfirm}
+        onCancel={modal.onCancel}
+        confirmText={modal.confirmText}
+        cancelText={modal.cancelText}
+      />
+      <ModalMessage
+        show={infoModal.show}
+        title={infoModal.title}
+        message={infoModal.message}
+        onConfirm={infoModal.onClose}
+        onCancel={null}
+        confirmText="Cerrar"
+        cancelText=""
+      />
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Crear Nuevo Proceso</h2>
         <button
@@ -150,7 +220,17 @@ const CreateProcess = () => {
         <h4>Pasos</h4>
         {steps.map((step, i) => (
           <div key={i} className="mb-4 p-3 border rounded bg-light">
-            <label>Nombre del paso</label>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <label className="mb-0">Nombre del paso</label>
+              <button
+                type="button"
+                className="btn btn-danger btn-sm"
+                onClick={() => handleRemoveStep(i)}
+                title="Eliminar paso"
+              >
+                <i className="bi bi-dash-circle"></i> Eliminar
+              </button>
+            </div>
             <input
               className="form-control mb-2"
               value={step.label}

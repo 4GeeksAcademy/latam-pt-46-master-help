@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
+import ModalMessage from "../components/ModalMessage";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const StepContent = ({ step }) => {
   switch (step.type) {
     case "TEXT":
-      return (
-        <p className="card-text text-body">
-          {step.content}
-        </p>
-      );
-
+      return <p className="card-text text-body">{step.content}</p>;
     case "IMAGE":
       return (
         <img
@@ -22,7 +18,6 @@ const StepContent = ({ step }) => {
           style={{ objectFit: "cover", maxHeight: "320px", width: "100%" }}
         />
       );
-
     case "VIDEO":
       return (
         <video className="w-100 rounded" controls>
@@ -30,7 +25,6 @@ const StepContent = ({ step }) => {
           Tu navegador no soporta video HTML5.
         </video>
       );
-
     case "VIDEO_URL":
       return (
         <div className="ratio ratio-16x9">
@@ -42,69 +36,58 @@ const StepContent = ({ step }) => {
           ></iframe>
         </div>
       );
-
-    case "PDF":
-      return (
-        <a
-          href={step.content}
-          target="_blank"
-          rel="noreferrer"
-          className="btn btn-outline-primary mt-2"
-        >
-          Ver documento PDF
-        </a>
-      );
-
     default:
-      return <p className="text-muted">Tipo de contenido no soportado.</p>;
+      return null;
   }
 };
 
 const ProcessDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [process, setProcess] = useState(null);
+  const [process, setProcess] = useState({});
   const [steps, setSteps] = useState([]);
-  const [error, setError] = useState("");
   const [editingStep, setEditingStep] = useState(null);
   const [editLabel, setEditLabel] = useState("");
   const [editContent, setEditContent] = useState("");
   const [editFile, setEditFile] = useState(null);
 
-  const fetchProcessDetail = async () => {
-    const token = localStorage.getItem("token");
+  // Modal state for confirmation
+  const [modal, setModal] = useState({
+    show: false,
+    title: "",
+    message: "",
+    onConfirm: null,
+    onCancel: null,
+    confirmText: "Eliminar",
+    cancelText: "Cancelar"
+  });
 
-    if (!token) {
-      setError("No hay token de autenticación.");
-      return;
-    }
+  // Modal for info/success/error
+  const [infoModal, setInfoModal] = useState({
+    show: false,
+    title: "",
+    message: "",
+    onClose: null
+  });
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/process/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("❌ Error al obtener el proceso:", text);
-        setError("No se pudo cargar el proceso. Verifica que tengas acceso.");
-        return;
-      }
-
-      const data = await res.json();
-      setProcess(data.process);
-      setSteps(data.steps);
-    } catch (err) {
-      console.error("⚠️ Error de red:", err);
-      setError("Ocurrió un error inesperado al cargar los datos.");
-    }
-  };
+  // Store which step is pending deletion
+  const [pendingDeleteStepId, setPendingDeleteStepId] = useState(null);
 
   useEffect(() => {
-    if (id) fetchProcessDetail();
+    fetchProcessDetail();
   }, [id]);
+
+  const fetchProcessDetail = async () => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${BACKEND_URL}/process/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setProcess(data.process || {});
+      setSteps(data.steps || []);
+    }
+  };
 
   const handleEditStepClick = (step) => {
     setEditingStep(step);
@@ -118,7 +101,6 @@ const ProcessDetail = () => {
     const isMedia = ["IMAGE", "PDF", "VIDEO"].includes(editingStep.type);
 
     if (isMedia && editFile) {
-      // Send as multipart/form-data
       const formData = new FormData();
       formData.append("label", editLabel);
       formData.append("type", editingStep.type);
@@ -134,10 +116,14 @@ const ProcessDetail = () => {
         fetchProcessDetail();
         setEditingStep(null);
       } else {
-        alert("No se pudo actualizar el paso.");
+        setInfoModal({
+          show: true,
+          title: "Error",
+          message: "No se pudo actualizar el paso.",
+          onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+        });
       }
     } else {
-      // Send as JSON
       const res = await fetch(`${BACKEND_URL}/step/${editingStep.id}`, {
         method: "PUT",
         headers: {
@@ -147,28 +133,110 @@ const ProcessDetail = () => {
         body: JSON.stringify({
           label: editLabel,
           content: editContent,
-          // add type/order if you want to allow editing them
         }),
       });
       if (res.ok) {
         fetchProcessDetail();
         setEditingStep(null);
       } else {
-        alert("No se pudo actualizar el paso.");
+        setInfoModal({
+          show: true,
+          title: "Error",
+          message: "No se pudo actualizar el paso.",
+          onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+        });
       }
     }
   };
 
-  if (error) {
-    return <div className="alert alert-danger mt-5 text-center">{error}</div>;
-  }
+  // Show modal instead of window.confirm
+  const handleDeleteStep = (stepId) => {
+    setPendingDeleteStepId(stepId);
+    setModal({
+      show: true,
+      title: "Eliminar Paso",
+      message: "¿Seguro que deseas eliminar este paso?",
+      onConfirm: () => confirmDeleteStep(stepId),
+      onCancel: () => setModal((prev) => ({ ...prev, show: false })),
+      confirmText: "Eliminar",
+      cancelText: "Cancelar"
+    });
+  };
 
-  if (!process) {
-    return <div className="text-center mt-5">Cargando proceso...</div>;
-  }
+  const confirmDeleteStep = async (stepId) => {
+    setModal((prev) => ({ ...prev, show: false }));
+    setPendingDeleteStepId(null);
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${BACKEND_URL}/step/${stepId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      setSteps(steps.filter((s) => s.id !== stepId));
+      setInfoModal({
+        show: true,
+        title: "Eliminado",
+        message: "El paso fue eliminado correctamente.",
+        onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+      });
+    } else {
+      setInfoModal({
+        show: true,
+        title: "Error",
+        message: "No se pudo eliminar el paso.",
+        onClose: () => setInfoModal((prev) => ({ ...prev, show: false }))
+      });
+    }
+  };
+
+  const stepBtnEditStyle = {
+    width: "36px",
+    height: "36px",
+    padding: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "8px",
+    border: "1px solid #00bfff",
+    background: "transparent",
+    color: "#00bfff",
+    transition: "background 0.2s, color 0.2s, border 0.2s",
+  };
+
+  const stepBtnDangerStyle = {
+    width: "36px",
+    height: "36px",
+    padding: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "8px",
+    border: "1px solid #dc3545",
+    background: "transparent",
+    color: "#dc3545",
+    transition: "background 0.2s, color 0.2s, border 0.2s",
+  };
 
   return (
     <div className="container mt-5">
+      <ModalMessage
+        show={modal.show}
+        title={modal.title}
+        message={modal.message}
+        onConfirm={modal.onConfirm}
+        onCancel={modal.onCancel}
+        confirmText={modal.confirmText}
+        cancelText={modal.cancelText}
+      />
+      <ModalMessage
+        show={infoModal.show}
+        title={infoModal.title}
+        message={infoModal.message}
+        onConfirm={infoModal.onClose}
+        onCancel={null}
+        confirmText="Cerrar"
+        cancelText=""
+      />
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="text-white">Proceso: {process.name}</h2>
         <button
@@ -185,22 +253,60 @@ const ProcessDetail = () => {
 
       <div className="row">
         {steps.map((step, idx) => {
-          const isMedia = ["IMAGE", "VIDEO", "VIDEO_URL"].includes(step.type);
           return (
-            <div key={idx} className={isMedia ? "col-md-6 mb-4" : "col-12 mb-4"}>
+            <div key={step.id} className="col-12 mb-4">
               <div className="card card-dark h-100 shadow-sm border-0">
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h5 className="card-title text-primary mb-0">
                       Paso {idx + 1}: {step.label}
                     </h5>
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      onClick={() => handleEditStepClick(step)}
-                      title="Editar Paso"
-                    >
-                      <Pencil size={16} />
-                    </button>
+                    <div className="d-flex gap-2">
+                      <button
+                        style={stepBtnEditStyle}
+                        className="btn btn-outline-info btn-sm d-flex justify-content-center align-items-center"
+                        onClick={() => handleEditStepClick(step)}
+                        title="Editar Paso"
+                      >
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "100%",
+                            height: "100%",
+                            lineHeight: 0,
+                          }}
+                        >
+                          <Pencil size={18} />
+                        </span>
+                      </button>
+                      <button
+                        style={stepBtnDangerStyle}
+                        className="btn btn-outline-danger btn-sm d-flex justify-content-center align-items-center"
+                        onClick={() => handleDeleteStep(step.id)}
+                        title="Eliminar Paso"
+                      >
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "100%",
+                            height: "100%",
+                            lineHeight: 0,
+                          }}
+                        >
+                          <i
+                            className="bi bi-trash"
+                            style={{
+                              fontSize: "1.1rem",
+                              marginTop: "15px",
+                            }}
+                          ></i>
+                        </span>
+                      </button>
+                    </div>
                   </div>
                   {editingStep?.id === step.id ? (
                     <div>
@@ -215,6 +321,17 @@ const ProcessDetail = () => {
                         value={editContent}
                         onChange={(e) => setEditContent(e.target.value)}
                       />
+                      {["IMAGE", "PDF", "VIDEO"].includes(editingStep?.type) && (
+                        <div className="mb-2">
+                          <label>Archivo nuevo (opcional)</label>
+                          <input
+                            className="form-control"
+                            type="file"
+                            onChange={e => setEditFile(e.target.files[0])}
+                          />
+                          <small className="text-muted">Si seleccionas un archivo, reemplazará el actual.</small>
+                        </div>
+                      )}
                       <button
                         className="btn btn-primary btn-sm"
                         onClick={handleEditStepSave}
@@ -237,48 +354,6 @@ const ProcessDetail = () => {
           );
         })}
       </div>
-
-      {editingStep && (
-        <div className="modal show" style={{ display: "block", background: "rgba(0,0,0,0.5)" }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Paso</h5>
-                <button type="button" className="btn-close" onClick={() => setEditingStep(null)} />
-              </div>
-              <div className="modal-body">
-                <label>Nombre del paso</label>
-                <input
-                  className="form-control mb-2"
-                  value={editLabel}
-                  onChange={e => setEditLabel(e.target.value)}
-                />
-                <label>Contenido</label>
-                <textarea
-                  className="form-control"
-                  value={editContent}
-                  onChange={e => setEditContent(e.target.value)}
-                />
-                {["IMAGE", "PDF", "VIDEO"].includes(editingStep?.type) && (
-                  <div className="mb-2">
-                    <label>Archivo nuevo (opcional)</label>
-                    <input
-                      className="form-control"
-                      type="file"
-                      onChange={e => setEditFile(e.target.files[0])}
-                    />
-                    <small className="text-muted">Si seleccionas un archivo, reemplazará el actual.</small>
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setEditingStep(null)}>Cancelar</button>
-                <button className="btn btn-primary" onClick={handleEditStepSave}>Guardar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
