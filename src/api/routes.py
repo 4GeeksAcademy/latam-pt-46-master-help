@@ -297,6 +297,21 @@ def update_step(step_id):
     return jsonify(step.serialize()), 200
 
 
+@api.route('/step/<int:step_id>', methods=['DELETE'])
+@jwt_required()
+def delete_step(step_id):
+    user_id = int(get_jwt_identity())
+    step = Step.query.get(step_id)
+    if not step:
+        return jsonify({"error": "Paso no encontrado"}), 404
+    if step.process.user_id != user_id:
+        return jsonify({"error": "No autorizado"}), 403
+
+    db.session.delete(step)
+    db.session.commit()
+    return jsonify({"msg": "Paso eliminado correctamente"}), 200
+
+
 # ------------------------- Autocomplete -------------------------
 
 @api.route('/autocomplete', methods=['GET'])

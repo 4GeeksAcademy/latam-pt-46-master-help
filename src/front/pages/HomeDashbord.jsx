@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import GenericCreateModal from "../components/ModalCreateElement";
 import CategoryList from "../components/CategoryList";
+import ModalMessage from "../components/ModalMessage";
 import introJs from 'intro.js';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -12,8 +13,24 @@ export const HomeDashboard = () => {
     const [currentToken, setCurrentToken] = useState(localStorage.getItem("token"));
     const [processesData, setProcessesData] = useState({});
     const [expandedCategories, setExpandedCategories] = useState(new Set());
-
     const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
+
+    // Modal for confirmation and info
+    const [modal, setModal] = useState({
+        show: false,
+        title: "",
+        message: "",
+        onConfirm: null,
+        onCancel: null,
+        confirmText: "Eliminar",
+        cancelText: "Cancelar"
+    });
+    const [infoModal, setInfoModal] = useState({
+        show: false,
+        title: "",
+        message: "",
+        onClose: null
+    });
 
     const navigate = useNavigate();
 
@@ -119,10 +136,24 @@ export const HomeDashboard = () => {
     };
     const toggleCategoryExpansion = useCallback(baseToggleCategoryExpansion, [processesData, loadProcessesForCategory]);
 
+    // Modal-based delete confirmation
     const baseHandleDeleteCategory = async (categoryId) => {
         const token = currentToken || localStorage.getItem("token");
         if (!token) { handleAuthError(); return; }
-        if (!window.confirm("¿Seguro que deseas eliminar esta categoría y todos sus procesos?")) return;
+        setModal({
+            show: true,
+            title: "Eliminar Categoría",
+            message: "¿Seguro que deseas eliminar esta categoría y todos sus procesos?",
+            confirmText: "Eliminar",
+            cancelText: "Cancelar",
+            onConfirm: () => confirmDeleteCategory(categoryId),
+            onCancel: () => setModal(prev => ({ ...prev, show: false }))
+        });
+    };
+
+    const confirmDeleteCategory = async (categoryId) => {
+        setModal(prev => ({ ...prev, show: false }));
+        const token = currentToken || localStorage.getItem("token");
         try {
             const res = await fetch(`${BACKEND_URL}/categories/${categoryId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
             if (!res.ok) {
@@ -131,22 +162,37 @@ export const HomeDashboard = () => {
                     const errorData = await res.json();
                     if (errorData && errorData.error) errorMessage = errorData.error;
                 } catch (e) { /* ignore */ }
-                alert(errorMessage);
+                setInfoModal({
+                    show: true,
+                    title: "Error",
+                    message: errorMessage,
+                    onClose: () => setInfoModal(prev => ({ ...prev, show: false }))
+                });
                 if (res.status === 401 || res.status === 403) handleAuthError();
                 return;
             }
             const successData = await res.json().catch(() => ({ message: "Categoría eliminada exitosamente." }));
-            alert(successData.message || "Categoría eliminada exitosamente.");
+            setInfoModal({
+                show: true,
+                title: "Eliminada",
+                message: successData.message || "Categoría eliminada exitosamente.",
+                onClose: () => setInfoModal(prev => ({ ...prev, show: false }))
+            });
             setCategories(prev => prev.filter(cat => cat.id !== categoryId));
             setProcessesData(prev => { const newData = { ...prev }; delete newData[categoryId]; return newData; });
             setExpandedCategories(prev => { const newExpanded = new Set(prev); newExpanded.delete(categoryId); return newExpanded; });
         } catch (err) {
             console.error("Network error deleting category:", err);
-            alert("Error de conexión al intentar eliminar la categoría.");
+            setInfoModal({
+                show: true,
+                title: "Error",
+                message: "Error de conexión al intentar eliminar la categoría.",
+                onClose: () => setInfoModal(prev => ({ ...prev, show: false }))
+            });
         }
     };
-    const handleDeleteCategory = useCallback(baseHandleDeleteCategory, [currentToken, handleAuthError, BACKEND_URL]);
 
+    const handleDeleteCategory = useCallback(baseHandleDeleteCategory, [currentToken, handleAuthError, BACKEND_URL]);
 
     // --- TOUR LOGIC WITH UNIQUE SELECTORS ---
     const startTour = () => {
@@ -180,9 +226,15 @@ export const HomeDashboard = () => {
                     },
                     {
                         element: '#tour-add-process',
-                        intro: 'Puedes crear un nuevo proceso dentro de tu Categoria!.',
+                        intro: 'Crea tu primer proceso aquí.',
                         position: 'left'
                     },
+                    // The following step is on another page (CreateProcess), see docs for multi-page tours
+                    {
+                        element: '#tour-first-step-label',
+                        intro: 'Agrega el primer paso de tu proceso aquí.',
+                        position: 'right'
+                    }
                 ],
                 tooltipClass: 'customTooltip',
                 overlayOpacity: 0.8,
@@ -206,6 +258,24 @@ export const HomeDashboard = () => {
 
     return (
         <>
+            <ModalMessage
+                show={modal.show}
+                title={modal.title}
+                message={modal.message}
+                onConfirm={modal.onConfirm}
+                onCancel={modal.onCancel}
+                confirmText={modal.confirmText}
+                cancelText={modal.cancelText}
+            />
+            <ModalMessage
+                show={infoModal.show}
+                title={infoModal.title}
+                message={infoModal.message}
+                onConfirm={infoModal.onClose}
+                onCancel={null}
+                confirmText="Cerrar"
+                cancelText=""
+            />
             <div className="container mt-5 py-4">
                 <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                     <h2 className="m-0">Panel de Inicio</h2>
